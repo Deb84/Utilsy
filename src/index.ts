@@ -11,13 +11,4 @@ const client = new Client({ intents });
 eventHandler(client)
 
 
-client.on(Events.InteractionCreate, async interaction => {
-  if (!interaction.isChatInputCommand()) return;
-  if (interaction.commandName === 'hi') {
-    await interaction.reply('hi!');
-  }
-})
-
-
-
 client.login(process.env.AUTH);
