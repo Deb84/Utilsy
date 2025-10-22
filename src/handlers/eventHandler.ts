@@ -1,16 +1,30 @@
 import { Client } from 'discord.js'
+import { readdirSync } from "fs";
+import { pathToFileURL } from "url";
+import path from 'path'
+import normalizePath from '../utils/normalizePath.ts'
+import paths from '../config/paths.json' with {type : 'json'}
 
-// TODO
-// - Dynamic import
 
-import clientReady from '../events/clientReady.ts'
-import messageCreate from '../events/messageCreate.ts'
-import interactionCreate from '../events/interactionCreate.ts'
+const eventsPath = normalizePath(paths.events)
+const eventFiles = readdirSync(eventsPath, { withFileTypes: true})
+
+const onceEvents = ['clientReady']
 
 
 export default async (client: Client) => {
-    client.once('clientReady', () => clientReady(client)) // clientReady used to be ready for the new api 
-    client.on('messageCreate', msg => messageCreate(msg))
-    client.on('interactionCreate', interaction => interactionCreate(interaction))
+        for (const file of eventFiles) {
+        const fileName = file.name.replace('.ts', '');
+        const filePath = path.join(file.parentPath, file.name);
+        const eventMod = await import(pathToFileURL(filePath).href);
+        const event = eventMod.default
+
+        if (onceEvents.includes(fileName)) {
+            client.once(fileName, (...args) => event(...args));
+            continue;
+        }
+
+        client.on(fileName, (...args) => event(...args))
+    }
 }
 

@@ -1,20 +1,27 @@
-import { CommandInteraction, Message } from "discord.js";
+import { CommandInteraction } from "discord.js";
+import { readdirSync } from "fs";
+import { pathToFileURL } from "url";
+import path from 'path'
+import normalizePath from '../utils/normalizePath.ts'
+import paths from '../config/paths.json' with {type : 'json'}
 
-import Hi from "../commands/slash/Hi.ts";
 
-// TODO : 
-// - Dynamic import
+const commands = new Map()
 
-function checkCommandName(command: CommandInteraction, expectedName: string) {
-    return Boolean(command.commandName === expectedName) // check if the commandName is the same than the expectedName
+const commandsPath = normalizePath(paths.commands)
+const commandFiles = readdirSync(commandsPath, { withFileTypes: true })
+
+for (const file of commandFiles) {
+    const commandName = file.name.replace('.ts', '')
+    const commandPath = path.join(file.parentPath, file.name)
+    const command = await import(pathToFileURL(commandPath).href) // convert the path to url and import
+    commands.set(commandName.toLowerCase(), command.default)
 }
 
-export default (command: Message | CommandInteraction) => {
+
+export default (command: CommandInteraction) => {
     if (command instanceof CommandInteraction) { // check if command is an interaction
-        if (checkCommandName(command, 'hi')) {Hi(command)}
-
-    } else if (command instanceof Message) { // check if command is an message
-        null // TODO
-    }
-
+        const handler = commands.get(command.commandName) // get the command func if exists
+        if (handler) handler(command) // execute the command func if exists
+    } 
 }

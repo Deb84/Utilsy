@@ -1,3 +1,4 @@
 {
-    "events": "./src/events"
+    "events": "./src/events",
+    "commands": "./src/commands"
 }
