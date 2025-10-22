@@ -3,7 +3,7 @@ import { CommandInteraction, Message } from "discord.js";
 import Hi from "../commands/slash/Hi.ts";
 
 // TODO : 
-// - Dynamic import of commands
+// - Dynamic import
 
 function checkCommandName(command: CommandInteraction, expectedName: string) {
     return Boolean(command.commandName === expectedName) // check if the commandName is the same than the expectedName
@@ -14,7 +14,7 @@ export default (command: Message | CommandInteraction) => {
         if (checkCommandName(command, 'hi')) {Hi(command)}
 
     } else if (command instanceof Message) { // check if command is an message
-        null
+        null // TODO
     }
 
 }

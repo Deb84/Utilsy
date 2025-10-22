@@ -1,5 +1,7 @@
 import { Client } from 'discord.js'
 
+// TODO
+// - Dynamic import
 
 import clientReady from '../events/clientReady.ts'
 import messageCreate from '../events/messageCreate.ts'
