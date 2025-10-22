@@ -7,14 +7,12 @@ import path from "path"
 const config = rawConfig as configType
 
 const outputPath = path.resolve(config.outputPath)
-console.log(outputPath)
 const guildDir = 'guilds'
 const channelDir = 'channels'
 
 
 
 export default async (msg: Message) => {
-    console.log('a')
     if (!msg) return
     if (!msg.channelId) return
     if (msg.guildId && !config.guildIDs.includes(msg.guildId)) return;
@@ -22,7 +20,6 @@ export default async (msg: Message) => {
     const guild = Boolean(msg.guild)
     const guildId = guild ? msg.guildId : null
     const channelId = msg.channelId
-    console.log('b')
 
     const parentPath = path.join(outputPath, ...(guildId ? [guildDir, guildId] : []), channelDir)
     const filePath = path.join(outputPath, ...(guildId ? [guildDir, guildId] : []), channelDir, `${channelId}.json`)

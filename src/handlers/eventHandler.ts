@@ -25,6 +25,7 @@ export default async (client: Client) => {
         }
 
         client.on(fileName, (...args) => event(...args))
+        console.log(`Event "${file.name}" loaded`)
     }
 }
 

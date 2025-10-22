@@ -16,6 +16,8 @@ for (const file of commandFiles) {
     const commandPath = path.join(file.parentPath, file.name)
     const command = await import(pathToFileURL(commandPath).href) // convert the path to url and import
     commands.set(commandName.toLowerCase(), command.default)
+
+    console.log(`Command "${file.name}" loaded`)
 }
 
 
