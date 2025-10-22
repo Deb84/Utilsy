@@ -1,13 +1,16 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js"
+import type { CommandData } from "../types/enums.types.ts";
+
+export const data: CommandData = {
+    commandName: 'hi',
+    description: 'Reply Hi!',
+    commandType: "guild",
+    accessLevel: "public"
+}
 
 export const slashCommandBuild = new SlashCommandBuilder()
-    .setName('hi')
-    .setDescription('Reply Hi!');
-
-export const data = {
-    commandType: "guild",
-    accessState: "public"
-}
+    .setName(data.commandName)
+    .setDescription(data.description);
 
 
 export async function execute(interaction: CommandInteraction) {

@@ -1,5 +1,5 @@
 import { REST, Routes } from "discord.js"
-import { CommandData } from "../../types/enums.types.ts";
+import type { CommandData } from "../../types/enums.types.ts";
 
 
 export default async (rest: REST, commandData: CommandData) => {
@@ -9,12 +9,15 @@ export default async (rest: REST, commandData: CommandData) => {
                 Routes.applicationCommands(process.env.APPID!),
                 { body: commandData.slashCommandBuild?.toJSON() }
             );
+            console.log(`"${commandData.commandName}" declared at Discord REST API as a global slash command`)
+
         } else if (commandData.commandType == 'guild' && commandData.access?.guildIDs) {
             for (const guildID of commandData.access.guildIDs) {
                 await rest.post(
                     Routes.applicationGuildCommands(process.env.APPID!, guildID),
                     { body: commandData.slashCommandBuild?.toJSON() }
                 );
+                console.log(`"${commandData.commandName}" declared at Discord REST API as a guild slash command`)
             }
         }
     } catch (error) {

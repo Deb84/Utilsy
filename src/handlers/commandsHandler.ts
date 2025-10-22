@@ -3,6 +3,7 @@ import { readdirSync } from "fs";
 import { pathToFileURL } from "url";
 import path from 'path'
 import normalizePath from '../utils/normalizePath.ts'
+import {add, remove, get} from '../services/slashDeclarationApi/index.ts'
 import paths from '../config/paths.json' with {type : 'json'}
 import { accessConfig } from '../config/config.config.local.ts'
 import type { CommandData } from "../types/enums.types.ts";
@@ -13,6 +14,8 @@ const commands = new Map()
 const commandsPath = normalizePath(paths.commands)
 const commandFiles = readdirSync(commandsPath, { withFileTypes: true })
 
+// load every command of the commands dir
+// TODO: only load when the command is require
 for (const file of commandFiles) {
     const commandName = file.name.replace('.ts', '')
     const commandPath = path.join(file.parentPath, file.name)
@@ -29,10 +32,14 @@ for (const file of commandFiles) {
 
     const commandData = command.data
     commandData.slashCommandBuild = command.slashCommandBuild
-    commandData.access = accessConfig[commandData.accessState]
+    commandData.access = accessConfig[commandData.accessLevel]
 
-    // impl slash Declaration :
-    // index, remove & exists
+    // TODO: impl slash Declaration :
+    // check if the command is declared in the rest api
+    // if yes, do nothing
+    // if no, declare it
+    // must be able to detect if each guild that should have access, has really access to the command, if one is missing, declare it
+    
 }
 
 
