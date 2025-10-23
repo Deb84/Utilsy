@@ -1,23 +1,52 @@
 import { CommandInteraction } from "discord.js";
 import type { AccessLevel } from "../types/enums.types.ts";
 
+// case 
+// command public & bot public -> everyone              
+// command test & bot public -> only testers           
+// command private & bot public -> only private         
+
+// command public & bot test -> only testers            
+// command test & bot test -> only testers              
+// command private & bot test -> only private           
+
+// command public & bot private -> only private
+// command test & bot private -> only private
+// command private & bot private -> only private
+
 
 export default async (interaction: CommandInteraction, accessLevel: AccessLevel) => {
     const config = await import("../config/config.config.local.ts" + '?update=' + Date.now());
-    const accessConfig = config.accessConfig
-    const accessState = config.accessState
+    const { accessConfig, accessState } = config
 
-    if (accessLevel == 'public' && accessState == 'public') return true // if the command is public and the bot is in public, everyone can access it
 
-    var actualAccessState = accessConfig[accessState] // get the actual access state of the bot
+    const userId = interaction.user?.id;
+    const guildId = interaction.guild?.id;
 
-    // check for private first
-    if (interaction.guild && accessConfig.private.guildIDs.includes(interaction.guild.id)) return true
-    if (interaction.user && accessConfig.private.userIDs.includes(interaction.user.id)) return true
+    const isIn = (scope: 'public' | 'test' | 'private') =>
+        accessConfig[scope]?.userIDs.includes(userId) ||
+        accessConfig[scope]?.guildIDs.includes(guildId);
 
-    // check for the actual bot access state
-    if (interaction.guild && actualAccessState?.guildIDs.includes(interaction.guild.id)) return true
-    if (interaction.user && actualAccessState?.userIDs.includes(interaction.user.id)) return true
+    
+    if (isIn('private')) return true; // authorize private by default
+
+    switch(accessState) {
+        case 'public':
+            if (accessLevel === 'public') return true
+            if (accessLevel === 'test') return isIn('test')
+            if (accessLevel === 'private') return isIn('private')
+            break
+
+        case 'test':
+            if (accessLevel === 'public') return true
+            if (accessLevel === 'test') return isIn('test')
+            if (accessLevel === 'private') return isIn('private')
+            break
+
+        case 'private':
+            if (accessLevel === 'private') return isIn('private')
+            
+    }
 
     return false 
 }

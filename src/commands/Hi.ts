@@ -10,7 +10,7 @@ const command: Command = {
         commandName: 'hi',
         description: 'Reply Hi!',
         commandType: "guild",
-        accessLevel: "private",
+        accessLevel: "public",
         slashCommandBuild: new SlashCommandBuilder()
             .setName('hi')
             .setDescription('Reply Hi!')
