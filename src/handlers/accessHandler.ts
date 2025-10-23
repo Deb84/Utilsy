@@ -1,5 +1,6 @@
 import { CommandInteraction } from "discord.js";
-import type { AccessLevel } from "../types/enums.types.ts";
+import type { Access, AccessLevel, CommandData } from "../types/enums.types.ts";
+import { config } from "../config/index.ts";
 
 // case 
 // command public & bot public -> everyone              
@@ -15,9 +16,15 @@ import type { AccessLevel } from "../types/enums.types.ts";
 // command private & bot private -> only private
 
 
-export default async (interaction: CommandInteraction, accessLevel: AccessLevel) => {
-    const config = await import("../config/config.config.local.ts" + '?update=' + Date.now());
-    const { accessConfig, accessState } = config
+export async function getCommandAccess(commandData: CommandData): Promise<Access> {
+    const { accessConfig } = await config.globalConfig()
+    const accessLevel = commandData.accessLevel
+    return accessConfig[accessLevel]
+}
+
+
+export async function hasCommandAccess(interaction: CommandInteraction, accessLevel: AccessLevel) {
+    const { accessConfig, accessState } = await config.globalConfig()
 
 
     const userId = interaction.user?.id;

@@ -12,7 +12,7 @@ export interface Access { // define the shape of access
 export interface AccessConfig {
     readonly private: Access
     readonly test: Access
-    readonly public: null // not needed, if the access value is null, everyone has access
+    readonly public: 'public' // not needed, if the access value is null, everyone has access
 }
 
 // commands enums
@@ -23,7 +23,6 @@ export interface CommandData {
     description: string
     accessLevel: AccessLevel
     commandType: CommandType
-    access?: Access | null
     slashCommandBuild?: SlashCommandBuilder
 }
 

@@ -3,10 +3,11 @@ import { readdirSync } from "fs";
 import { pathToFileURL } from "url";
 import path from 'path'
 import normalizePath from '../utils/normalizePath.ts'
-import paths from '../config/paths.json' with {type : 'json'}
+import { config } from '../config/index.ts'
 import type { Command } from "../types/enums.types.ts";
-import accessHandler from "./accessHandler.ts";
+import {hasCommandAccess} from "./accessHandler.ts";
 
+const paths = config.paths
 
 export default async (commandInteraction: CommandInteraction) => {
     if (commandInteraction instanceof CommandInteraction) { // check if command is an interaction
@@ -14,13 +15,13 @@ export default async (commandInteraction: CommandInteraction) => {
             const commandsPath = normalizePath(paths.commands)
             const commandFiles = readdirSync(commandsPath, { withFileTypes: true })
             const file = commandFiles.find(file => file.name.replace('.ts', '').toLowerCase() === commandInteraction.commandName)
-            console.log(file)
+
             if (file) {
                 const filePath = path.join(file?.parentPath, file.name)
                 const commandModule = await import(pathToFileURL(filePath).href)
                 const command = commandModule.default as Command
                 console.log(command)
-                if (await accessHandler(commandInteraction, command.data.accessLevel)) {
+                if (await hasCommandAccess(commandInteraction, command.data.accessLevel)) {
                     command.execute(commandInteraction)
                 } else {
                     commandInteraction.reply("you don't have access to this")
