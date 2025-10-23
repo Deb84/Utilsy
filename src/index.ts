@@ -6,8 +6,7 @@ import eventHandler from './handlers/eventHandler.ts'
 dotenv.config();
 
 const client = new Client({ intents });
+client.login(process.env.AUTH);
 
 eventHandler(client)
 
-
-client.login(process.env.AUTH);

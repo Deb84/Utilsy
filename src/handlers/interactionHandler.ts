@@ -1,5 +1,5 @@
 import type { Interaction } from "discord.js";
-import commandsHandler from "./commandsHandler.ts";
+import commandsHandler from "./commandHandler.ts";
 
 /* Handle the interaction and route them */
 
