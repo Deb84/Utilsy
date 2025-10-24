@@ -1,4 +1,5 @@
 import { REST, Routes } from "discord.js"
+import { getCommandAccess } from "../../handlers/accessHandler.ts";
 import type { CommandData } from "../../types/enums.types.ts";
 
 
@@ -11,8 +12,8 @@ export default async (rest: REST, commandData: CommandData) => {
             );
             console.log(`"${commandData.commandName}" declared at Discord REST API as a global slash command`)
 
-        } else if (commandData.commandType == 'guild' && commandData.access?.guildIDs) {
-            for (const guildID of commandData.access.guildIDs) {
+        } else if (commandData.commandType == 'guild' && commandData.accessLevel !== 'public') {
+            for (const guildID of (await getCommandAccess(commandData)).guildIDs) {
                 await rest.post(
                     Routes.applicationGuildCommands(process.env.APPID!, guildID),
                     { body: commandData.slashCommandBuild?.toJSON() }
