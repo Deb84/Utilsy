@@ -2,20 +2,21 @@
 
 import { SlashCommandBuilder } from 'discord.js'
 import { add, get, remove, exists} from '../../src/services/slashDeclarationApi/index.ts'
+import { isArray } from '../../src/utils/checkObjectType.ts'
 import type { CommandData } from '../../src/types/enums.types.ts'
 
 const commandData: CommandData = {
-    commandName: 'hi',
+    commandName: 'test',
     description: 'Just a test command',
     commandType: "guild",
-    accessLevel: "public",
+    accessLevel: "test",
     slashCommandBuild: new SlashCommandBuilder()
         .setName('test')
         .setDescription('Just a test command')
 };
 
 
-async function test() {
+async function testget() {
     console.log('a')
     try {
         console.log('b')
@@ -26,6 +27,15 @@ async function test() {
     }
 }
 
-console.log(await exists(commandData))
+async function testadd() {
+    add(commandData)
+}
 
-test()
+async function testremove() {
+    remove(commandData)
+}
+
+
+testadd()
+testget()
+testremove()

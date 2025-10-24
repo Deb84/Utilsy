@@ -13,8 +13,8 @@ export function add(commandData: CommandData) {
     return addCommand(rest, commandData)
 }
 
-export function remove(commandData: CommandData, command: APIApplicationCommand) {
-    return removeCommand(rest, commandData, command)
+export function remove(commandData: CommandData) {
+    return removeCommand(rest, commandData)
 }
 
 export function get(commandData: CommandData) {

@@ -18,7 +18,7 @@ export default async (rest: REST, commandData: CommandData) => {
                     Routes.applicationGuildCommands(process.env.APPID!, guildID),
                     { body: commandData.slashCommandBuild?.toJSON() }
                 );
-                console.log(`"${commandData.commandName}" declared at Discord REST API as a guild slash command`)
+                console.log(`"${commandData.commandName}" declared at Discord REST API as a guild slash command for guild ${guildID}`)
             }
         }
     } catch (error) {
