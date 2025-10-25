@@ -2,7 +2,7 @@ import { CommandInteraction, SlashCommandBuilder } from "discord.js"
 import type { Command } from "../types/enums.types.ts";
 
 async function execute(interaction: CommandInteraction) {
-    await interaction.reply('Hi!'); // reply to the interaction msg
+    await interaction.reply('Bye!'); // reply to the interaction msg
 }
 
 const name = 'bye'

@@ -5,15 +5,18 @@ async function execute(interaction: CommandInteraction) {
     await interaction.reply('Hi!'); // reply to the interaction msg
 }
 
+const name = 'Hi'
+const description = 'Reply Hi!'
+
 const command: Command = {
     data: {
-        commandName: 'hi',
-        description: 'Reply Hi!',
+        commandName: name,
+        description: description,
         commandType: "global",
         accessLevel: "test",
         slashCommandBuild: new SlashCommandBuilder()
-            .setName('hi')
-            .setDescription('Reply Hi!')
+            .setName(name)
+            .setDescription(description)
     },
     execute
 }
