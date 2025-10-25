@@ -1,6 +1,6 @@
-import { AccessConfig, AccessState } from "../types/enums.types"
+import { AccessConfig, AccessLevel } from "../types/enums.types.ts"
 
-export const accessState: AccessState = 'test' as const // possible values are test, public, private
+export const accessState: AccessLevel = 'test' as const // possible values are test, public, private
 
 export const accessConfig: AccessConfig = {
     private: {
@@ -10,5 +10,6 @@ export const accessConfig: AccessConfig = {
     test: {
         userIDs: [],
         guildIDs: []
-    }
+    },
+    public: 'public'
 } as const

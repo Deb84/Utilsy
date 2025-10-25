@@ -3,7 +3,7 @@ import path from 'path'
 import { pathToFileURL } from 'url'
 import { add, exists } from '../services/slashCmdDeclaration/index.ts'
 import { config } from '../config/index.ts'
-import type { Command, CommandData } from '../types/enums.types.ts'
+import type { Command } from '../types/enums.types.ts'
 
 
 export default async () => {
