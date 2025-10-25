@@ -9,7 +9,7 @@ dotenv.config();
 const client = new Client({ intents: config.intents });
 client.login(process.env.AUTH);
 
-bootstrap()
+bootstrap(client)
 
 eventHandler(client)
 

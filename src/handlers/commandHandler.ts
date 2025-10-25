@@ -2,7 +2,6 @@ import { CommandInteraction } from "discord.js";
 import { readdirSync } from "fs";
 import { pathToFileURL } from "url";
 import path from 'path'
-import normalizePath from '../utils/normalizePath.ts'
 import { config } from '../config/index.ts'
 import type { Command } from "../types/enums.types.ts";
 import {hasCommandAccess} from "./accessHandler.ts";

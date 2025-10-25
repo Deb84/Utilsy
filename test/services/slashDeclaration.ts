@@ -5,14 +5,24 @@ import { add, get, remove, exists} from '../../src/services/slashCmdDeclaration/
 import { isArray } from '../../src/utils/checkObjectType.ts'
 import type { CommandData } from '../../src/types/enums.types.ts'
 
+const cmdBuild = new SlashCommandBuilder()
+        .setName('test')
+        .setDescription('Just a test command')
+        .addSubcommand((cmd) => 
+            cmd
+                .setName('test2')
+                .setDescription('aa'))
+        .addSubcommand((cmd) => 
+            cmd
+                .setName('test3')
+                .setDescription('bb'))
+
 const commandData: CommandData = {
     commandName: 'test',
     description: 'Just a test command',
     commandType: "guild",
     accessLevel: "test",
-    slashCommandBuild: new SlashCommandBuilder()
-        .setName('test')
-        .setDescription('Just a test command')
+    slashCommandBuild: cmdBuild
 };
 
 
@@ -38,4 +48,4 @@ async function testremove() {
 
 testadd()
 testget()
-testremove()
+

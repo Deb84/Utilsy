@@ -1,4 +1,4 @@
-import { CommandInteraction, SlashCommandBuilder } from "discord.js"
+import { CommandInteraction, SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js"
 
 // global enums
 export type AccessLevel = 'private' | 'test' | 'public' // defines who have access to
@@ -28,7 +28,7 @@ export interface CommandData {
     description: string
     accessLevel: AccessLevel
     commandType: CommandType
-    slashCommandBuild?: SlashCommandBuilder
+    slashCommandBuild?: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder
 }
 
 export interface Command {
