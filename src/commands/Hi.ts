@@ -5,7 +5,7 @@ async function execute(interaction: CommandInteraction) {
     await interaction.reply('Hi!'); // reply to the interaction msg
 }
 
-const name = 'Hi'
+const name = 'hi'
 const description = 'Reply Hi!'
 
 const command: Command = {
