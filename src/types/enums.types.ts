@@ -15,6 +15,11 @@ export interface AccessConfig {
     readonly public: 'public' // not needed, if the access value is null, everyone has access
 }
 
+export interface Paths {
+    events: string
+    commands: string
+}
+
 // commands enums
 export type CommandType = 'guild' | 'global'
 

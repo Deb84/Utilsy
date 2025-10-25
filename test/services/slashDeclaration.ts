@@ -1,7 +1,7 @@
 
 
 import { SlashCommandBuilder } from 'discord.js'
-import { add, get, remove, exists} from '../../src/services/slashDeclarationApi/index.ts'
+import { add, get, remove, exists} from '../../src/services/slashCmdDeclaration/index.ts'
 import { isArray } from '../../src/utils/checkObjectType.ts'
 import type { CommandData } from '../../src/types/enums.types.ts'
 

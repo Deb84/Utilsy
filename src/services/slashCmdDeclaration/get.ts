@@ -10,7 +10,7 @@ export default async (rest: REST, commandData: CommandData) => {
         if (commandData.commandType == 'global' ) {
             const commands = await rest.get(Routes.applicationCommands(process.env.APPID!)) as APIApplicationCommand[]
             const command = commands.find(c => c.name === commandData.commandName);
-            // log
+            // log 
             return command
 
         } else if (commandData.commandType == 'guild' && commandData.accessLevel !== 'public') {
@@ -22,7 +22,7 @@ export default async (rest: REST, commandData: CommandData) => {
                 commandsArray.push(command)
             }
             // log
-            return commandsArray
+            return commandsArray // return an array of commands for each guild
         } else if (!await getCommandAccess(commandData)) {
             console.error(`Unable to get the command "${commandData.commandName}", check the type of the command or if the command scope have guilds`)
         }
