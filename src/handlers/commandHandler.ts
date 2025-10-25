@@ -7,12 +7,10 @@ import { config } from '../config/index.ts'
 import type { Command } from "../types/enums.types.ts";
 import {hasCommandAccess} from "./accessHandler.ts";
 
-const paths = config.paths
-
 export default async (commandInteraction: CommandInteraction) => {
     if (commandInteraction instanceof CommandInteraction) { // check if command is an interaction
         try {
-            const commandsPath = normalizePath(paths.commands)
+            const commandsPath = config.paths.commands
             const commandFiles = readdirSync(commandsPath, { withFileTypes: true })
             const file = commandFiles.find(file => file.name.replace('.ts', '').toLowerCase() === commandInteraction.commandName)
 
