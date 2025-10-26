@@ -8,7 +8,7 @@ import {
 } from "./modules/index.ts";
 
 
-export default class discordInfos {
+class discordInfos {
     private client: Client
 
     constructor(client: Client) {
@@ -43,6 +43,6 @@ export function initDiscordInfos(client: Client) {
 }
 
 export function getDiscordInfos() {
-    if (!instance) throw new Error('DiscordInfos not initialized')
+    if (!instance) throw new Error('discordInfos not initialized')
     return instance
 }

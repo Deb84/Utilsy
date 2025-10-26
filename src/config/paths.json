@@ -1,4 +1,6 @@
 {
     "events": "./src/events",
-    "commands": "./src/commands"
+    "commands": "./src/commands",
+
+    "embedTemplates": "./src/utils/embedBuilder/templates"
 }

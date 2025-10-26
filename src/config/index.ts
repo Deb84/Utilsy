@@ -1,7 +1,7 @@
 import normalizePath from '../utils/normalizePath.ts'
 import intents from './intents.ts'
 import paths from './paths.json' with {type: 'json'}
-import type { Paths } from '../types/enums.types.ts' 
+import type { BotConfig, Paths } from '../types/enums.types.ts' 
 
 
 async function reloadConfig() {
@@ -10,7 +10,7 @@ async function reloadConfig() {
 
 
 // TODO : config interface
-export const config = {
+export const config: BotConfig = {
     intents: intents,
     paths: (() => { // normalize the paths
         let newPaths: Record<string, string> = {}

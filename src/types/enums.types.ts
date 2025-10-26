@@ -1,4 +1,5 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js"
+import type { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js"
+import intents from "../config/intents.ts"
 
 // global enums
 export type AccessLevel = 'private' | 'test' | 'public' // defines who have access to
@@ -9,6 +10,7 @@ export interface Access { // define the shape of access
 }
 
 // config
+
 export interface AccessConfig {
     readonly private: Access
     readonly test: Access
@@ -18,6 +20,19 @@ export interface AccessConfig {
 export interface Paths {
     events: string
     commands: string
+    embedTemplates: string
+}
+
+interface GlobalConfig {
+    accessState: AccessLevel
+    mainColor: `#${string}`
+    accessConfig: AccessConfig
+}
+
+export interface BotConfig {
+    intents: typeof intents
+    paths: Paths
+    globalConfig: () => Promise<GlobalConfig>
 }
 
 // commands enums
@@ -34,4 +49,11 @@ export interface CommandData {
 export interface Command {
     data: CommandData
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>
+}
+
+
+// embed templates
+export interface EmbedTemplate {
+    keys?: string[]
+    getEmbed: () => Promise<EmbedBuilder>
 }

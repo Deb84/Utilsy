@@ -1,5 +1,6 @@
-import { ChatInputCommandInteraction, Embed, SlashCommandBuilder } from "discord.js"
+import { ChatInputCommandInteraction, Embed, EmbedBuilder, SlashCommandBuilder } from "discord.js"
 import {getDiscordInfos} from '../services/discordInfos/discordInfos.ts'
+import {getEmbedBuild} from '../utils/embedBuilder/embedBuilder.ts'
 import type { Command } from "../types/enums.types.ts";
 
 
@@ -8,7 +9,7 @@ const name = 'getinfo'
 const description = 'Allow to get an info relative to discord api'
 
 
-
+// TODO : create an slashCommand builder utils
 const cmdBuild = new SlashCommandBuilder()
             .setName(name)
             .setDescription(description)
@@ -16,44 +17,44 @@ const cmdBuild = new SlashCommandBuilder()
             .addSubcommand(cmd => 
                 cmd
                 .setName('user')
-                .setDescription('')
+                .setDescription('a')
                 .addStringOption(opt => 
                     opt
                     .setName('userid')
-                    .setDescription('')
+                    .setDescription('a')
                 )
             )
 
             .addSubcommand(cmd => 
                 cmd
                 .setName('guild')
-                .setDescription('')
+                .setDescription('b')
                 .addStringOption(opt => 
                     opt
                     .setName('guildid')
-                    .setDescription('')
+                    .setDescription('b')
                 )
             )
 
             .addSubcommand(cmd => 
                 cmd
                 .setName('channel')
-                .setDescription('')
+                .setDescription('c')
                 .addStringOption(opt => 
                     opt
                     .setName('channelid')
-                    .setDescription('')
+                    .setDescription('c')
                 )
             )
 
             .addSubcommand(cmd => 
                 cmd
                 .setName('role')
-                .setDescription('')
+                .setDescription('d')
                 .addStringOption(opt => 
                     opt
                     .setName('roleid')
-                    .setDescription('')
+                    .setDescription('d')
                     .setRequired(true)
                 )
             )
@@ -61,11 +62,11 @@ const cmdBuild = new SlashCommandBuilder()
             .addSubcommand(cmd => 
                 cmd
                 .setName('emoji')
-                .setDescription('')
+                .setDescription('e')
                 .addStringOption(opt => 
                     opt
                     .setName('emojiid')
-                    .setDescription('')
+                    .setDescription('e')
                     .setRequired(true)
                 )
             )
@@ -85,17 +86,21 @@ export default command;
 
 
 async function execute(interaction: ChatInputCommandInteraction) {
+    const dcInfo = getDiscordInfos()
+    const embedBuild = getEmbedBuild()
+
     const sub = interaction.options.getSubcommand()
     const opt = interaction.options.getString(`${sub}id`)
 
-    function reply(r: Embed) {
+    function reply(r: EmbedBuilder) {
         interaction.reply({embeds: [r]})
     }
 
 
     switch(sub) {
         case 'user':
+            
+            reply(await embedBuild.buildViaTemplate('getInfoTemplate', 'get user', await dcInfo.getUser(interaction.user.id)))
 
-        
     }
 }
