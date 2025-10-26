@@ -18,7 +18,7 @@ class embedBuild {
     }
 
 
-    async buildViaTemplate(templateName: string, title:string, arr: User | Guild | Channel | Role) {
+    async buildFromTemplate(templateName: string, title:string, arr: User | Guild | Channel | Role) {
         const template = await getTemplates(templateName, this.templatePath)
         if (!template) throw new Error(`Unable to get the templete ${templateName}`)
         const embed = await template.getEmbed()

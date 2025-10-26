@@ -100,7 +100,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
     switch(sub) {
         case 'user':
             
-            reply(await embedBuild.buildViaTemplate('getInfoTemplate', 'get user', await dcInfo.getUser(interaction.user.id)))
+            reply(await embedBuild.buildFromTemplate('getInfoTemplate', 'get user', await dcInfo.getUser(opt ?? interaction.user.id)))
 
     }
 }

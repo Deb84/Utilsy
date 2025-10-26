@@ -1,4 +1,4 @@
-import { CommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction, CommandInteraction } from "discord.js";
 import { readdirSync } from "fs";
 import { pathToFileURL } from "url";
 import path from 'path'
@@ -6,8 +6,8 @@ import { config } from '../config/index.ts'
 import type { Command } from "../types/enums.types.ts";
 import {hasCommandAccess} from "./accessHandler.ts";
 
-export default async (commandInteraction: CommandInteraction) => {
-    if (commandInteraction instanceof CommandInteraction) { // check if command is an interaction
+export default async (commandInteraction: ChatInputCommandInteraction) => {
+    if (commandInteraction instanceof ChatInputCommandInteraction) { // check if command is an interaction
         try {
             const commandsPath = config.paths.commands
             const commandFiles = readdirSync(commandsPath, { withFileTypes: true })
@@ -17,7 +17,6 @@ export default async (commandInteraction: CommandInteraction) => {
                 const filePath = path.join(file?.parentPath, file.name)
                 const commandModule = await import(pathToFileURL(filePath).href)
                 const command = commandModule.default as Command
-                console.log(command)
                 if (await hasCommandAccess(commandInteraction, command.data.accessLevel)) {
                     command.execute(commandInteraction)
                 } else {

@@ -8,7 +8,6 @@ export default async (fileName: string, templatePath: string) => {
 
     if (fileName === 'index') throw new Error(`The embed template can't be named "index"`)
     async function read(p: string) {
-        console.log(p)
         const entries = readdirSync(p, {withFileTypes: true})
         for (const entry of entries) {
             if (entry.isDirectory()) return await read(path.join(entry.parentPath, entry.name))
