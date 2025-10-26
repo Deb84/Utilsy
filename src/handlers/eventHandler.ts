@@ -2,11 +2,10 @@ import { Client } from 'discord.js'
 import { readdirSync } from "fs";
 import { pathToFileURL } from "url";
 import path from 'path'
-import normalizePath from '../utils/normalizePath.ts'
-import paths from '../config/paths.json' with {type : 'json'}
+import {config} from '../config/index.ts'
 
 
-const eventsPath = normalizePath(paths.events)
+const eventsPath = config.paths.events
 const eventFiles = readdirSync(eventsPath, { withFileTypes: true})
 
 const onceEvents = ['clientReady']
