@@ -1,75 +1,89 @@
-import { ChatInputCommandInteraction, Embed, EmbedBuilder, SlashCommandBuilder } from "discord.js"
+import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js"
 import {getDiscordInfos} from '../services/discordInfos/discordInfos.ts'
 import {getEmbedBuild} from '../utils/embedBuilder/embedBuilder.ts'
-import type { Command } from "../types/enums.types.ts";
+import type { BuildCommandData, Command } from "../types/enums.types.ts";
 
 
 
 const name = 'getinfo'
 const description = 'Allow to get an info relative to discord api'
 
+const buildCommandData: BuildCommandData  = {
+    name: 'getinfo',
+    description: 'Return an embed of selected informations',
+    sub: [
+        {
+            name: 'user',
+            description: 'Return an embed of user informations',
+            opts: [{
+                type: 'string',
+                name: 'id',
+                description: 'user id (right click on a user with developper mode enabled)'
+            }]
+        },
+        {
+            name: 'guild',
+            description: 'Return an embed of guild informations',
+            opts: [{
+                type: 'string',
+                name: 'id',
+                description: 'guild id (right click on a guild with developper mode enabled)'
+            }]
+        },
+        {
+            name: 'channel',
+            description: 'Return an embed of channel informations',
+            opts: [{
+                type: 'string',
+                name: 'id',
+                description: 'channel id (right click on a channel with developper mode enabled)'
+            }]
+        },
+        {
+            name: 'role',
+            description: 'Return an embed of role informations',
+            opts: [{
+                type: 'string',
+                name: 'id',
+                description: 'role id (right click on a role with developper mode enabled)'
+            }]
+        },
+        {
+            name: 'emoji',
+            description: 'Return an embed of emoji informations',
+            opts: [{
+                type: 'string',
+                name: 'id',
+                description: 'emoji id'
+            }]
+        },
+        {
+            name: 'message',
+            description: 'Return an embed of message informations',
+            opts: [{
+                type: 'string',
+                name: 'id',
+                description: 'message id (right click on a message with developper mode enabled)'
+            }]
+        }
+    ]
+}
+
+const sCD = buildCommandData
 
 // TODO : create an slashCommand builder utils
-const cmdBuild = new SlashCommandBuilder()
-            .setName(name)
-            .setDescription(description)
+const cmdBuild = new SlashCommandBuilder().setName(name).setDescription(description)
 
-            .addSubcommand(cmd => 
-                cmd
-                .setName('user')
-                .setDescription('a')
-                .addStringOption(opt => 
-                    opt
-                    .setName('userid')
-                    .setDescription('a')
-                )
-            )
+            /* .addSubcommand(cmd => cmd.setName(sCD.user.name).setDescription(sCD.user.description).addStringOption(opt => opt.setName('userid').setDescription('a')))
 
-            .addSubcommand(cmd => 
-                cmd
-                .setName('guild')
-                .setDescription('b')
-                .addStringOption(opt => 
-                    opt
-                    .setName('guildid')
-                    .setDescription('b')
-                )
-            )
+            .addSubcommand(cmd => cmd.setName('guild').setDescription('b').addStringOption(opt => opt.setName('guildid').setDescription('b')))
 
-            .addSubcommand(cmd => 
-                cmd
-                .setName('channel')
-                .setDescription('c')
-                .addStringOption(opt => 
-                    opt
-                    .setName('channelid')
-                    .setDescription('c')
-                )
-            )
+            .addSubcommand(cmd => cmd.setName('channel').setDescription('c').addStringOption(opt => opt.setName('channelid').setDescription('c')))
 
-            .addSubcommand(cmd => 
-                cmd
-                .setName('role')
-                .setDescription('d')
-                .addStringOption(opt => 
-                    opt
-                    .setName('roleid')
-                    .setDescription('d')
-                    .setRequired(true)
-                )
-            )
+            .addSubcommand(cmd => cmd.setName('role').setDescription('d').addStringOption(opt => opt.setName('roleid').setDescription('d').setRequired(true)))
 
-            .addSubcommand(cmd => 
-                cmd
-                .setName('emoji')
-                .setDescription('e')
-                .addStringOption(opt => 
-                    opt
-                    .setName('emojiid')
-                    .setDescription('e')
-                    .setRequired(true)
-                )
-            )
+            .addSubcommand(cmd => cmd.setName('emoji').setDescription('e').addStringOption(opt => opt.setName('emojiid').setDescription('e').setRequired(true))
+            ) */
 
 
 const command: Command = {

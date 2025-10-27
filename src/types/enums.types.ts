@@ -51,6 +51,30 @@ export interface Command {
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>
 }
 
+// Command Builder
+
+export type OptType = 'string' | 'int' | 'user' | 'role' | 'channel' | 'bool'
+
+export interface BuildCommandOptData {
+    type: OptType
+    name: string
+    description: string
+    required?: boolean
+}
+
+export interface BuildSubCommandData {
+    name: string
+    description: string
+    opts?: BuildCommandOptData[]
+}
+
+export interface BuildCommandData {
+    name: string
+    description: string
+    sub?: BuildSubCommandData[]
+    opts?: BuildCommandOptData[]
+}
+
 
 // embed templates
 export interface EmbedTemplate {
