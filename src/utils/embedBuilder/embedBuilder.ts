@@ -2,7 +2,7 @@ import type { Channel, Guild, Role, User } from 'discord.js'
 import getTemplates from './templates/index.ts'
 import type { BotConfig } from '../../types/enums.types.ts'
 
-
+const baseName = 'base'
 
 class embedBuild {
     private config: BotConfig
@@ -18,16 +18,11 @@ class embedBuild {
     }
 
 
-    async buildFromTemplate(templateName: string, title:string, arr: User | Guild | Channel | Role) {
+    async buildFromTemplate(templateName: string) {
+        const base = await getTemplates(baseName, this.templatePath)
         const template = await getTemplates(templateName, this.templatePath)
         if (!template) throw new Error(`Unable to get the templete ${templateName}`)
-        const embed = await template.getEmbed()
-        
-        embed.setTitle(`${embed.data.title ?? ''} ${title}`)
-
-        template.keys?.forEach(e => 
-            embed.addFields({name: e ?? '-', value: (arr as any)[e] ?? '-'})
-        )
+        const embed = await template.getEmbed(this.config)
 
         return embed
     }

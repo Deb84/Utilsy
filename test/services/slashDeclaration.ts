@@ -18,7 +18,7 @@ const cmdBuild = new SlashCommandBuilder()
                 .setDescription('bb'))
 
 const commandData: CommandData = {
-    commandName: 'test',
+    commandName: 'getinfo',
     description: 'Just a test command',
     commandType: "guild",
     accessLevel: "test",
@@ -46,6 +46,4 @@ async function testremove() {
 }
 
 
-testadd()
-testget()
-
+testremove()

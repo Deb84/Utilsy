@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, CommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 import { readdirSync } from "fs";
 import { pathToFileURL } from "url";
 import path from 'path'
@@ -8,10 +8,24 @@ import {hasCommandAccess} from "./accessHandler.ts";
 
 export default async (commandInteraction: ChatInputCommandInteraction) => {
     if (commandInteraction instanceof ChatInputCommandInteraction) { // check if command is an interaction
+        const commandsPath = config.paths.commands
+
+
+        function search(p: string, expectedName: string) {
+            const entryPoint = 'index'
+            const commandFiles = readdirSync(p, { withFileTypes: true })
+            for (const file of commandFiles) {
+                if (file.isDirectory() && file.name === expectedName) {
+                    return search(path.join(file.parentPath, file.name), entryPoint)
+                }
+                const fileName = file.name.replace('.ts', '').toLowerCase()
+                if (fileName === expectedName) return file
+            }
+        }
+
+
         try {
-            const commandsPath = config.paths.commands
-            const commandFiles = readdirSync(commandsPath, { withFileTypes: true })
-            const file = commandFiles.find(file => file.name.replace('.ts', '').toLowerCase() === commandInteraction.commandName)
+            const file = search(commandsPath, commandInteraction.commandName)
 
             if (file) {
                 const filePath = path.join(file?.parentPath, file.name)

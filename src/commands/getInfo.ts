@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js"
 import {getDiscordInfos} from '../services/discordInfos/discordInfos.ts'
 import {getEmbedBuild} from '../utils/embedBuilder/embedBuilder.ts'
+import {getSlashCmdAutoBuilder} from '../utils/slashCommandBuilder/slashCmdAutoBuilder.ts'
 import type { BuildCommandData, Command } from "../types/enums.types.ts";
 
 
@@ -72,7 +73,7 @@ const buildCommandData: BuildCommandData  = {
 const sCD = buildCommandData
 
 // TODO : create an slashCommand builder utils
-const cmdBuild = new SlashCommandBuilder().setName(name).setDescription(description)
+/* const cmdBuild = new SlashCommandBuilder().setName(name).setDescription(description) */
 
             /* .addSubcommand(cmd => cmd.setName(sCD.user.name).setDescription(sCD.user.description).addStringOption(opt => opt.setName('userid').setDescription('a')))
 
@@ -86,13 +87,15 @@ const cmdBuild = new SlashCommandBuilder().setName(name).setDescription(descript
             ) */
 
 
+const build = getSlashCmdAutoBuilder().buildFromData(buildCommandData)
+
 const command: Command = {
     data: {
         commandName: name,
         description: description,
         commandType: "guild",
         accessLevel: "test",
-        slashCommandBuild: cmdBuild
+        slashCommandBuild: build
     },
     execute
 }
@@ -114,7 +117,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
     switch(sub) {
         case 'user':
             
-            reply(await embedBuild.buildFromTemplate('getInfoTemplate', 'get user', await dcInfo.getUser(opt ?? interaction.user.id)))
+            /* reply(await embedBuild.buildFromTemplate('getInfoTemplate', 'user', await dcInfo.getUser(opt ?? interaction.user.id))) */
 
     }
 }

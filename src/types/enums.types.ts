@@ -24,8 +24,10 @@ export interface Paths {
 }
 
 interface GlobalConfig {
-    accessState: AccessLevel
+    botName: string
     mainColor: `#${string}`
+    author: string
+    accessState: AccessLevel
     accessConfig: AccessConfig
 }
 
@@ -79,5 +81,5 @@ export interface BuildCommandData {
 // embed templates
 export interface EmbedTemplate {
     keys?: string[]
-    getEmbed: () => Promise<EmbedBuilder>
+    getEmbed: (config: BotConfig) => Promise<EmbedBuilder>
 }

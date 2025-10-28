@@ -10,7 +10,7 @@ class slashCommandAutoBuilder {
 
     buildFromData(data: BuildCommandData) {
 
-        function defineOpt(opt: BuildCommandOptData, cmd: CmdBuilder) {
+        function applyOpt(opt: BuildCommandOptData, cmd: CmdBuilder) {
 
             // HATE to do this like that btw, so many lines for NOTHING
             switch(opt.type) {
@@ -47,7 +47,7 @@ class slashCommandAutoBuilder {
 
         function addOpt(opts: BuildCommandOptData[], cmd: CmdBuilder) {
             opts.forEach(opt => {
-                defineOpt(opt, cmd)
+                applyOpt(opt, cmd)
             })
         }
 
@@ -65,4 +65,15 @@ class slashCommandAutoBuilder {
 
         return build
     }
+}
+
+let instance: slashCommandAutoBuilder | null = null
+
+export function slashCmdAutoBuilderInit() {
+    if (!instance) instance = new slashCommandAutoBuilder()
+}
+
+export function getSlashCmdAutoBuilder() {
+    if (!instance) throw new Error('embedBuild not initialized')
+    return instance
 }
