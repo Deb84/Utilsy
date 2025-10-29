@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "strict": true
+  },
+  "include": [
+    "src",
+    "types.d.ts"
+  ]
+}

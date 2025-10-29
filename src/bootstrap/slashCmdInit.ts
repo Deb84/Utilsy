@@ -1,16 +1,27 @@
 import { add, exists } from '../services/slashCmdDeclaration/index.ts'
 import { getCmdFsUtils } from '../utils/fsUtils/CommandsFsUtils.ts'
+import { ICommandsFsUtils } from '../utils/fsUtils/types/ICommandsFsUtils.ts'
 
+interface ISlashCmdInit {
+    declare(): Promise<void>
+}
 
-export default async () => {
-    const cmdFsUtils = getCmdFsUtils()
+export class SlashCommandInit implements ISlashCmdInit {
+    private commandFsUtils: ICommandsFsUtils
 
-    const commands = await cmdFsUtils.importAllCommands({noCache: true})
-    
-    for (const command of commands) {
-        const commandData = command.data
-        if (!(await exists(commandData))) {
-            add(commandData)
-        } 
+    constructor(commandFsUtils: ICommandsFsUtils) {
+        this.commandFsUtils = commandFsUtils
+        this.declare()
+    }
+
+    async declare() {
+
+        const commands = await this.commandFsUtils.importAllCommands({noCache: true})
+        for (const command of commands) {
+            const commandData = command.data
+            if (!(await exists(commandData))) {
+                add(commandData)
+            } 
+        }
     }
 }

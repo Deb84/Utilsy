@@ -7,11 +7,7 @@ import type { Command } from "../types/enums.types.ts";
 import {hasCommandAccess} from "./accessHandler.ts";
 
 export default async (commandInteraction: ChatInputCommandInteraction) => {
-    if (commandInteraction instanceof ChatInputCommandInteraction) { // check if command is an interaction
-        const commandsPath = config.paths.commands
-
-
-        function search(p: string, expectedName: string) {
+    function search(p: string, expectedName: string) {
             const entryPoint = 'index'
             const commandFiles = readdirSync(p, { withFileTypes: true })
             for (const file of commandFiles) {
@@ -22,6 +18,9 @@ export default async (commandInteraction: ChatInputCommandInteraction) => {
                 if (fileName === expectedName) return file
             }
         }
+
+    if (commandInteraction instanceof ChatInputCommandInteraction) { // check if command is an interaction
+        const commandsPath = config.paths.commands
 
 
         try {
