@@ -1,6 +1,5 @@
 import { add, exists } from '../services/slashCmdDeclaration/index.ts'
-import { getCmdFsUtils } from '../utils/fsUtils/CommandsFsUtils.ts'
-import { ICommandsFsUtils } from '../utils/fsUtils/types/ICommandsFsUtils.ts'
+import type { ICommandsFsUtils } from '../utils/fsUtils/types/ICommandsFsUtils.ts'
 
 interface ISlashCmdInit {
     declare(): Promise<void>

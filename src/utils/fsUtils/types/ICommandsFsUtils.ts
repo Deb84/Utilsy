@@ -15,7 +15,6 @@ export type CommandEntry = {
 export type CreateCmd = (name: string, file: Dirent) => CommandEntry
 
 export interface ICommandsFsUtils {
-    
     getCommands: (settings: GetCommandsSettings, p: string) => Promise<CommandEntry[]>
     search: (expectedName: string) => Promise<Dirent | undefined>
     importCommand: (expectedName: string, settings?: {noCache?: boolean, file?: Dirent}) => Promise<Command | undefined>

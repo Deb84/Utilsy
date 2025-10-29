@@ -1,7 +1,7 @@
 import {readdir} from 'fs/promises'
 import path from 'path'
 import { pathToFileURL } from 'url';
-import type {ICommandsFsUtils, GetCommandsSettings, CommandEntry, Dirent} from './types/ICommandsFsUtils'
+import type {ICommandsFsUtils, GetCommandsSettings, CommandEntry, Dirent} from './types/ICommandsFsUtils.ts'
 
 
 // CBU (Can Be Upgraded):
