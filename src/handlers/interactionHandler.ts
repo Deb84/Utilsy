@@ -1,11 +1,17 @@
-import type { Interaction } from "discord.js";
-import commandsHandler from "./commandHandler.ts";
+import {IInteractionHandler, Interaction} from "./types/IInteractionHandler";
+import { ICommandHandler } from "./types/ICommandHandler";
 
 /* Handle the interaction and route them */
+export default class InteractionHandler implements IInteractionHandler {
+    private commandHandler: ICommandHandler
 
-export default (interaction: Interaction) => {
+    constructor(commandHandler: ICommandHandler) {
+        this.commandHandler = commandHandler
+    }
 
-    if (interaction.isChatInputCommand()) {
-        commandsHandler(interaction)
+    handleInteraction(interaction: Interaction) {
+        if (interaction.isChatInputCommand()) {
+            this.commandHandler.handle(interaction)
+        }
     }
 }

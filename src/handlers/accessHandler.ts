@@ -1,6 +1,5 @@
 import { CommandInteraction } from "discord.js";
-import type { Access, AccessLevel, CommandData } from "../types/enums.types.ts";
-import { config } from "../config/index.ts";
+import type IAccessHandler from "./types/IAccessHandler";
 
 // case 
 // command public & bot public -> everyone              
@@ -15,8 +14,62 @@ import { config } from "../config/index.ts";
 // command test & bot private -> only private
 // command private & bot private -> only private
 
+export class AccessHandler implements IAccessHandler {
+    private config: BotConfig
 
-export async function getCommandAccess(commandData: CommandData): Promise<Access> {
+    constructor(config: BotConfig) {
+        this.config = config
+    }
+
+
+    async hasCommandAccess(interaction: CommandInteraction, accessLevel: AccessLevel) {
+        const { accessConfig, accessState } = await this.config.globalConfig()
+
+        const userId = interaction.user?.id;
+        const guildId = interaction.guild?.id;
+
+        const isIn = (scope: 'test' | 'private') => {
+            const acfg = accessConfig[scope]
+            if (!acfg) return false
+            return (
+                (userId !== undefined && acfg.userIDs.includes(userId)) 
+                || (guildId !== undefined && acfg.guildIDs.includes(guildId))
+            )
+        }
+
+        
+        if (isIn('private')) return true; // authorize private by default
+
+        switch(accessState) {
+            case 'public':
+                if (accessLevel === 'public') return true
+                if (accessLevel === 'test') return isIn('test')
+                if (accessLevel === 'private') return isIn('private')
+                break
+
+            case 'test':
+                if (accessLevel === 'public') return true
+                if (accessLevel === 'test') return isIn('test')
+                if (accessLevel === 'private') return isIn('private')
+                break
+
+            case 'private':
+                if (accessLevel === 'private') return isIn('private')
+                
+        }
+
+        return false 
+    }
+
+    async getCommandAccess(commandData: CommandData): Promise<Access | 'public'> {
+        const { accessConfig } = await this.config.globalConfig()
+        const accessLevel = commandData.accessLevel
+        return accessConfig[accessLevel]
+    }
+}
+
+
+/* export async function getCommandAccess(commandData: CommandData): Promise<Access | 'public'> {
     const { accessConfig } = await config.globalConfig()
     const accessLevel = commandData.accessLevel
     return accessConfig[accessLevel]
@@ -30,9 +83,14 @@ export async function hasCommandAccess(interaction: CommandInteraction, accessLe
     const userId = interaction.user?.id;
     const guildId = interaction.guild?.id;
 
-    const isIn = (scope: 'public' | 'test' | 'private') =>
-        accessConfig[scope]?.userIDs.includes(userId) ||
-        accessConfig[scope]?.guildIDs.includes(guildId);
+    const isIn = (scope: 'test' | 'private') => {
+        const acfg = accessConfig[scope]
+        if (!acfg) return false
+        return (
+            (userId !== undefined && acfg.userIDs.includes(userId)) 
+            || (guildId !== undefined && acfg.guildIDs.includes(guildId))
+        )
+    }
 
     
     if (isIn('private')) return true; // authorize private by default
@@ -56,4 +114,4 @@ export async function hasCommandAccess(interaction: CommandInteraction, accessLe
     }
 
     return false 
-}
+} */

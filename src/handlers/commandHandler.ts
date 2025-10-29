@@ -1,49 +1,31 @@
-import { ChatInputCommandInteraction } from "discord.js";
-import { readdirSync } from "fs";
-import { pathToFileURL } from "url";
-import path from 'path'
-import { config } from '../config/index.ts'
-import type { Command } from "../types/enums.types.ts";
-import {hasCommandAccess} from "./accessHandler.ts";
 
-export default async (commandInteraction: ChatInputCommandInteraction) => {
-    function search(p: string, expectedName: string) {
-            const entryPoint = 'index'
-            const commandFiles = readdirSync(p, { withFileTypes: true })
-            for (const file of commandFiles) {
-                if (file.isDirectory() && file.name === expectedName) {
-                    return search(path.join(file.parentPath, file.name), entryPoint)
-                }
-                const fileName = file.name.replace('.ts', '').toLowerCase()
-                if (fileName === expectedName) return file
-            }
-        }
+import type { ICommandsFsUtils } from "../utils/fsUtils/types/ICommandsFsUtils.ts";
+import type IAccessHandler from "./types/IAccessHandler.ts";
+import type { ICommandHandler, Client, ChatInputCommandInteraction } from "./types/ICommandHandler.ts";
 
-    if (commandInteraction instanceof ChatInputCommandInteraction) { // check if command is an interaction
-        const commandsPath = config.paths.commands
+// utilser client.command.set
+
+export class CommandHandler implements ICommandHandler {
+    private commandsFsUtils: ICommandsFsUtils
+    private accessHandler: IAccessHandler
+    private client: Client
+
+    constructor(commandsFsUtils: ICommandsFsUtils, accessHandler: IAccessHandler, client: Client) {
+        this.commandsFsUtils = commandsFsUtils
+        this.accessHandler = accessHandler
+        this.client = client
+    }
 
 
-        try {
-            const file = search(commandsPath, commandInteraction.commandName)
-
-            if (file) {
-                const filePath = path.join(file?.parentPath, file.name)
-                const commandModule = await import(pathToFileURL(filePath).href)
-                const command = commandModule.default as Command
-                if (await hasCommandAccess(commandInteraction, command.data.accessLevel)) {
-                    command.execute(commandInteraction)
-                } else {
-                    commandInteraction.reply("you don't have access to this")
-                }
-
+    async handle(commandInteraction: ChatInputCommandInteraction) {
+        const expectedName = commandInteraction.commandName
+        const command = await this.commandsFsUtils.importCommand(expectedName)
+        if (command) {
+            if (await this.accessHandler.hasCommandAccess(commandInteraction, command.data.accessLevel)) {
+                command.execute(commandInteraction)
             } else {
-                commandInteraction.reply("this command does not exist")
+                commandInteraction.reply("you don't have access to this")
             }
-
-
-
-        } catch (error) {
-            console.log(error)
         }
-    } 
+    }
 }
