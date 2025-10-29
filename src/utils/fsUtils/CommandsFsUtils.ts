@@ -21,7 +21,7 @@ type CommandEntry = {
 // too many toLowerCase()
 
 
-class CommandsFsUtils {
+export class CommandsFsUtils {
     private config: BotConfig
     private commandsPath: string
     private entryPoint: string
@@ -94,7 +94,6 @@ class CommandsFsUtils {
         const commands = await this.getCommands({toLowerCase: true})
         for (const command of commands) {
             const cmdMod = await this.importCommand(command.name, {noCache: settings?.noCache}) 
-
             if (cmdMod) commandsArr.push(cmdMod)
         }
         return commandsArr

@@ -9,7 +9,6 @@ import { config } from "../config/index.ts"
 
 export default (client: Client) => {
     cmdFsUtilsInit(config)
-
     slashCmdInit()
     initDiscordInfos(client)
     embedBuildInit(config)

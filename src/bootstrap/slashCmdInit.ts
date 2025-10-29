@@ -1,20 +1,14 @@
-import { readdirSync } from 'fs'
-import path from 'path'
-import { pathToFileURL } from 'url'
 import { add, exists } from '../services/slashCmdDeclaration/index.ts'
-import { config } from '../config/index.ts'
-import type { Command } from '../types/enums.types.ts'
+import { getCmdFsUtils } from '../utils/fsUtils/CommandsFsUtils.ts'
 
 
 export default async () => {
-    const commandPath = config.paths.commands
-    const files = readdirSync(commandPath, {withFileTypes: true})
-    
-    for (const file of files) {
-        const commandMod = await import(pathToFileURL(path.join(file.parentPath, file.name)).href)
-        const command = commandMod.default as Command
-        const commandData = command.data
+    const cmdFsUtils = getCmdFsUtils()
 
+    const commands = await cmdFsUtils.importAllCommands({noCache: true})
+    
+    for (const command of commands) {
+        const commandData = command.data
         if (!(await exists(commandData))) {
             add(commandData)
         } 
