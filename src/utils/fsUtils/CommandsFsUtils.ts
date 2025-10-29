@@ -1,9 +1,8 @@
 import {readdir} from 'fs/promises'
-import type {Dirent} from 'fs'
 import path from 'path'
-import { config } from '../../config/index.ts';
-import type { BotConfig } from "../../types/enums.types";
 import { pathToFileURL } from 'url';
+import type {Dirent} from 'fs'
+import type { BotConfig, Command } from "../../types/enums.types";
 
 type GetCommandsSettings = {
     commandName?: string
@@ -11,10 +10,15 @@ type GetCommandsSettings = {
     newPath?: string
 }
 
-type Command = {
+type CommandEntry = {
     name: string
     file: Dirent
 }
+
+
+// CBU (Can Be Upgraded):
+// too many toLowerCase()
+
 
 class CommandsFsUtils {
     private config: BotConfig
@@ -29,26 +33,26 @@ class CommandsFsUtils {
 
 
 
-    async getCommands(settings: GetCommandsSettings = {}, p = this.commandsPath): Promise<Command[]> {
+    async getCommands(settings: GetCommandsSettings = {}, p = this.commandsPath): Promise<CommandEntry[]> {
         /* 
         Commands folder reading algorithm :
         The function retourn an array of command object, each object contains the name of the command and the Dirent object of the command file
 
-        There's two kind of layers : main & sub
+        To clarify, there's two kind of layers : main & sub
         For the main, every .ts files are added in a command object, the command name is the filename without the ext
         For the sub, an entry point file is searched (index.ts) and added to a command object, the command name is the parent folder name
 
         The function starts to search in the main then search in each sub of the main folder
         */
  
-        function createCmd(name: string, file: Dirent): Command {                                                           // create a command object
+        function createCmd(name: string, file: Dirent): CommandEntry {      // create a command object
             return {
                 name: name,
                 file: file
             }
         }
 
-        let commands: Command[] = []
+        let commands: CommandEntry[] = []
         const commandFiles = await readdir(p, { withFileTypes: true })
 
         for (const file of commandFiles) {
@@ -66,19 +70,29 @@ class CommandsFsUtils {
         return commands 
     }
 
-    async search(expectedName: string): Promise<Dirent | undefined> {
+    async search(expectedName: string): Promise<Dirent | undefined> {                                                      // search the command among the commands array returned by getCommands()
         const commands = await this.getCommands({toLowerCase: true})
         const command = commands.find(e => e.name === expectedName)
         return command?.file
     }
 
-    async importCommand(expectedName: string) {
+    async importCommand(expectedName: string) {                                                                            // import & return the command module that matchs by using search()
         const file = await this.search(expectedName)
         if (file) {
             const filePath = path.join(file.parentPath, file.name)
-            return await import(pathToFileURL(filePath).href)
+            return await import(pathToFileURL(filePath).href) as Command
         }
     }
 }
 
 
+let instance: CommandsFsUtils
+
+export function cmdFsUtilsInit(config: BotConfig) {
+    if (!instance) instance = new CommandsFsUtils(config)
+}
+
+export function getCmdFsUtils() {
+    if (!instance) throw new Error('CommandsFsUtils not initialized')
+    return instance
+}
