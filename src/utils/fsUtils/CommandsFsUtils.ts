@@ -3,6 +3,7 @@ import path from 'path'
 import { pathToFileURL } from 'url';
 import type {Dirent} from 'fs'
 import type { BotConfig, Command } from "../../types/enums.types";
+import { config } from '../../config/index.ts';
 
 type GetCommandsSettings = {
     commandName?: string
@@ -76,13 +77,29 @@ class CommandsFsUtils {
         return command?.file
     }
 
-    async importCommand(expectedName: string) {                                                                            // import & return the command module that matchs by using search()
+    async importCommand(expectedName: string, settings?: {noCache?: boolean}) {                                                                            // import & return the command module that matchs by using search()
         const file = await this.search(expectedName)
         if (file) {
             const filePath = path.join(file.parentPath, file.name)
-            return await import(pathToFileURL(filePath).href) as Command
+            const url = !settings?.noCache 
+                ? pathToFileURL(filePath).href
+                : pathToFileURL(filePath).href + '?update=' + Date.now()
+            const module = await import(url)
+            return module.default as Command
         }
     }
+
+    async importAllCommands(settings?: {noCache?: boolean}): Promise<Command[]> {
+        const commandsArr: Command[] = []
+        const commands = await this.getCommands({toLowerCase: true})
+        for (const command of commands) {
+            const cmdMod = await this.importCommand(command.name, {noCache: settings?.noCache}) 
+
+            if (cmdMod) commandsArr.push(cmdMod)
+        }
+        return commandsArr
+    }
+
 }
 
 
