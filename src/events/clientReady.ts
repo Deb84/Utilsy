@@ -1,5 +1,15 @@
 import { Client } from "discord.js"
 
-export default (client: Client) => {
-    console.log(`Connected as ${client.user?.displayName}`)
+export const deps = ['Client']
+
+export default class ClientReady {
+    private client: Client
+
+    constructor(client: Client) {
+        this.client = client
+    }
+
+    event() {
+        console.log(`Connected as ${this.client.user?.displayName}`)
+    }
 }

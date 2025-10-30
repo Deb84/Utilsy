@@ -12,7 +12,9 @@
   "dependencies": {
     "chokidar": "^4.0.3",
     "discord.js": "^14.23.2",
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "inversify": "^7.10.4",
+    "reflect-metadata": "^0.2.2"
   },
   "type": "module"
 }

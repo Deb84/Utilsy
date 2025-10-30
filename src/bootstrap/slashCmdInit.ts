@@ -1,4 +1,4 @@
-import { add, exists } from '../services/slashCmdDeclaration/index.ts'
+import type { ISlashDeclaration } from '../services/slashCmdDeclaration/types/ISlashCmdDeclaration.ts'
 import type { ICommandsFsUtils } from '../utils/fsUtils/types/ICommandsFsUtils.ts'
 
 interface ISlashCmdInit {
@@ -7,9 +7,11 @@ interface ISlashCmdInit {
 
 export class SlashCommandInit implements ISlashCmdInit {
     private commandFsUtils: ICommandsFsUtils
+    private slashCmdDeclaration: ISlashDeclaration
 
-    constructor(commandFsUtils: ICommandsFsUtils) {
+    constructor(commandFsUtils: ICommandsFsUtils, slashCmdDeclaration: ISlashDeclaration) {
         this.commandFsUtils = commandFsUtils
+        this.slashCmdDeclaration = slashCmdDeclaration
         this.declare()
     }
 
@@ -17,8 +19,8 @@ export class SlashCommandInit implements ISlashCmdInit {
         const commands = await this.commandFsUtils.importAllCommands({noCache: true})
         for (const command of commands) {
             const commandData = command.data
-            if (!(await exists(commandData))) {
-                add(commandData)
+            if (!(await this.slashCmdDeclaration.exists(commandData))) {
+                this.slashCmdDeclaration.add(commandData)
             } 
         }
     }

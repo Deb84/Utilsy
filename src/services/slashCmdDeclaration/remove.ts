@@ -1,14 +1,13 @@
 import { REST, Routes } from "discord.js"
-import type { APIApplicationCommand } from "discord.js"
-import { getCommandAccess } from "../../handlers/accessHandler.ts";
 import get from './get.ts'
 import type { CommandData } from "../../types/enums.types.ts";
 import { isArray } from "../../utils/checkObjectType.ts";
+import type IAccessHandler from "../../handlers/types/IAccessHandler.ts";
 
-export default async (rest: REST, commandData: CommandData) => {
+export default async (rest: REST, accessHandler: IAccessHandler, commandData: CommandData) => {
     try {
         if (commandData.commandType == 'global' ) {
-            const command = await get(rest, commandData)
+            const command = await get(rest, accessHandler, commandData)
             if (command && !isArray(command)) {
                 await rest.delete(
                 Routes.applicationCommand(process.env.APPID!, command.id)
@@ -18,7 +17,7 @@ export default async (rest: REST, commandData: CommandData) => {
 
         } else if (commandData.commandType == 'guild' && commandData.accessLevel !== 'public') {
             // a guild command, if added on mutliple guild, can have multiple instances with different ids, get() get them
-            var commands = await get(rest, commandData) // get the command from the data
+            var commands = await get(rest, accessHandler, commandData) // get the command from the data
             if (commands && isArray(commands)) { 
                 commands = commands.filter(Boolean) // remove problematic value
 

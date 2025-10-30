@@ -1,6 +1,9 @@
-import { IInteractionHandler, Interaction } from "../handlers/types/IInteractionHandler";
+import type { IInteractionHandler, Interaction } from "../handlers/types/IInteractionHandler.ts";
+import type { IInteractionCreateEvent } from "./types/IInteractionCreate.ts";
 
-export default class InteractionCreateEvent {
+export const deps = ['InteractionHandler']
+
+export default class InteractionCreateEvent implements IInteractionCreateEvent {
     private interactionHandler: IInteractionHandler
 
     constructor(interactionHandler: IInteractionHandler) {

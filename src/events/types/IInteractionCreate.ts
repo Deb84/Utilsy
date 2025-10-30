@@ -1,7 +1,7 @@
-import { Interaction } from "discord.js";
-import IEvent from "./IEvent";
-export {Interaction}
+import type { Interaction } from "discord.js";
+import type {IEvent, IEventClass} from "./IEvent";
+export type {Interaction}
 
-export interface IInteractionCreateEvent extends IEvent<Interaction> {
+export interface IInteractionCreateEvent extends IEventClass<[Interaction]> {
     event: (interaction: Interaction) => void
 }

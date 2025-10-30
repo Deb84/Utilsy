@@ -1,5 +1,5 @@
-import {IInteractionHandler, Interaction} from "./types/IInteractionHandler";
-import { ICommandHandler } from "./types/ICommandHandler";
+import type {IInteractionHandler, Interaction} from "./types/IInteractionHandler";
+import type{ ICommandHandler } from "./types/ICommandHandler";
 
 /* Handle the interaction and route them */
 export default class InteractionHandler implements IInteractionHandler {
