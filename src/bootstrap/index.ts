@@ -20,7 +20,7 @@ export default (client: Client) => {
 
     const rest = new REST({ version: '10'}).setToken(process.env.AUTH!)
 
-    c.bind('onfig').toConstantValue(config)
+    c.bind('Config').toConstantValue(config)
     c.bind('Client').toConstantValue(client)
 
     c.bind('CommandsFsUtils').toDynamicValue(() => new CommandsFsUtils(config))
