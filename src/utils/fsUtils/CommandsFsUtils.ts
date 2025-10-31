@@ -87,16 +87,3 @@ export class CommandsFsUtils implements ICommandsFsUtils {
     }
 
 }
-
-
-// signleton pattern
-let instance: CommandsFsUtils
-
-export function cmdFsUtilsInit(config: BotConfig) {
-    if (!instance) instance = new CommandsFsUtils(config)
-}
-
-export function getCmdFsUtils() {
-    if (!instance) throw new Error('CommandsFsUtils not initialized')
-    return instance
-}
