@@ -1,5 +1,6 @@
 import type { Interaction } from "discord.js";
-export type {Interaction}
+import type { ICommandHandler } from "./ICommandHandler.ts";
+export type {Interaction, ICommandHandler}
 
 export interface IInteractionHandler {
     handleInteraction: (interaction: Interaction) => void

@@ -1,9 +1,5 @@
-import type { ISlashDeclaration } from '../services/slashCmdDeclaration/types/ISlashCmdDeclaration.ts'
-import type { ICommandsFsUtils } from '../utils/fsUtils/types/ICommandsFsUtils.ts'
-
-interface ISlashCmdInit {
-    declare(): Promise<void>
-}
+import type { ISlashCmdInit, ICommandsFsUtils, ISlashDeclaration } from "./types/ISlashCmdInit.ts"
+export type {ISlashCmdInit}
 
 export class SlashCommandInit implements ISlashCmdInit {
     private commandFsUtils: ICommandsFsUtils

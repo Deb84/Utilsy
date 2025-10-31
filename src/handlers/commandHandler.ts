@@ -1,7 +1,12 @@
 
-import type { ICommandsFsUtils } from "../utils/fsUtils/types/ICommandsFsUtils.ts";
-import type IAccessHandler from "./types/IAccessHandler.ts";
-import type { ICommandHandler, Client, ChatInputCommandInteraction } from "./types/ICommandHandler.ts";
+import type { 
+    ICommandHandler, 
+    IAccessHandler, 
+    ICommandsFsUtils, 
+    Client, 
+    ChatInputCommandInteraction 
+} from "./types/ICommandHandler.ts";
+export type {ICommandHandler}
 
 // utilser client.command.set
 

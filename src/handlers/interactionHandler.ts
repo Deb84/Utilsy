@@ -1,8 +1,8 @@
-import type {IInteractionHandler, Interaction} from "./types/IInteractionHandler";
-import type{ ICommandHandler } from "./types/ICommandHandler";
+import type {IInteractionHandler, Interaction, ICommandHandler} from "./types/IInteractionHandler.ts";
+export type {IInteractionHandler}
 
 /* Handle the interaction and route them */
-export default class InteractionHandler implements IInteractionHandler {
+export class InteractionHandler implements IInteractionHandler {
     private commandHandler: ICommandHandler
 
     constructor(commandHandler: ICommandHandler) {

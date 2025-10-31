@@ -8,12 +8,13 @@ import type {
     IEvent,
     IEventClass,
 } from "./types/IEventHandlers.ts";
+export type {IEventHandlers}
 
 
 const onceEvents = ['clientReady']
 const exclude = ['messageCreate']
 
-export default class EventHandler implements IEventHandlers {
+export class EventHandler implements IEventHandlers {
     private config: BotConfig
     private client: Client
     private container: Container

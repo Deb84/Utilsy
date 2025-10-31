@@ -1,5 +1,5 @@
-import type { CommandInteraction } from "discord.js";
-import type IAccessHandler from "./types/IAccessHandler";
+import type {IAccessHandler, CommandInteraction} from "./types/IAccessHandler.ts";
+export type {IAccessHandler}
 
 // case 
 // command public & bot public -> everyone              
