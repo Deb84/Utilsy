@@ -1,9 +1,17 @@
 {
   "compilerOptions": {
+    "module": "nodenext",
+    "useUnknownInCatchVariables": false,
     "allowImportingTsExtensions": true,
     "noEmit": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
-    "strict": true
+    "strict": true,
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"],
+      "result": ["utils/result/index.ts"]
+    }
   },
   "include": [
     "src",

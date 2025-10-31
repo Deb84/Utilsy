@@ -1,7 +1,7 @@
 import { REST, Routes } from "discord.js";
 import type { APIApplicationCommand } from "discord.js"
 import type { CommandData } from "../../types/enums.types.ts";
-import type IAccessHandler from "../../handlers/types/IAccessHandler.ts";
+import type {IAccessHandler} from "../../handlers/types/IAccessHandler.ts";
 
 
 

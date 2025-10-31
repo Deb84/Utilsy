@@ -2,7 +2,7 @@ import addCommand from './add.ts'
 import removeCommand from './remove.ts'
 import getCommand from './get.ts'
 import existsCommand from './exists.ts'
-import type IAccessHandler from '../../handlers/types/IAccessHandler.ts'
+import type {IAccessHandler} from '../../handlers/types/IAccessHandler.ts'
 import type { ISlashDeclaration, REST } from './types/ISlashCmdDeclaration.ts'
 
 
