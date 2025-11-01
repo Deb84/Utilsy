@@ -1,4 +1,4 @@
-import { type ApplicationCommand, Routes } from "discord.js";
+import { type APIApplicationCommand, Routes } from "discord.js";
 import type { ICommandRegistar, IRestClient } from "../types/ICommandRegistar.ts";
 export type {ICommandRegistar}
 
@@ -41,19 +41,19 @@ export class CommandRegistar implements ICommandRegistar {
 
     //get
     async getGlobal(commandId: string) {
-        return await this.restClient.get<ApplicationCommand>(Routes.applicationCommand(this.env.APPID, commandId))
+        return await this.restClient.get<APIApplicationCommand>(Routes.applicationCommand(this.env.APPID, commandId))
     }
 
     async getGuild(guildId: string, commandId: string) {
-        return await this.restClient.get<ApplicationCommand>(Routes.applicationGuildCommand(this.env.APPID, guildId, commandId))
+        return await this.restClient.get<APIApplicationCommand>(Routes.applicationGuildCommand(this.env.APPID, guildId, commandId))
     }
 
     async getGlobalAll() {
-        return await this.restClient.get<ApplicationCommand[]>(Routes.applicationCommands(this.env.APPID))
+        return await this.restClient.get<APIApplicationCommand[]>(Routes.applicationCommands(this.env.APPID))
     }
 
     async getGuildAll(guildId: string) {
-        return await this.restClient.get<ApplicationCommand[]>(Routes.applicationGuildCommands(this.env.APPID, guildId))
+        return await this.restClient.get<APIApplicationCommand[]>(Routes.applicationGuildCommands(this.env.APPID, guildId))
     }
     
 }

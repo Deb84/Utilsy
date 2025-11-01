@@ -1,4 +1,4 @@
-import { ApplicationCommand } from "discord.js";
+import { APIApplicationCommand } from "discord.js";
 import type { IRestClient } from "./IRestClient.ts";
 export type {IRestClient}
 
@@ -12,8 +12,8 @@ export interface ICommandRegistar {
     updateGlobal: (commandJson: unknown, commandId: string) => Promise<Result>
     updateGuild: (commandJson: unknown, guildId: string, commandId: string) => Promise<Result>
 
-    getGlobal: (commandId: string) => Promise<Result<ApplicationCommand>>
-    getGuild: (guildId: string, commandId: string) => Promise<Result<ApplicationCommand>>
-    getGlobalAll: () => Promise<Result<ApplicationCommand[]>>
-    getGuildAll: (guildId: string) => Promise<Result<ApplicationCommand[]>>
+    getGlobal: (commandId: string) => Promise<Result<APIApplicationCommand>>
+    getGuild: (guildId: string, commandId: string) => Promise<Result<APIApplicationCommand>>
+    getGlobalAll: () => Promise<Result<APIApplicationCommand[]>>
+    getGuildAll: (guildId: string) => Promise<Result<APIApplicationCommand[]>>
 }

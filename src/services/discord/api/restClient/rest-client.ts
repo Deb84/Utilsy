@@ -1,12 +1,12 @@
+import { DiscordApiCodeErrResolver } from "@/errors/discord/api/discordapi-err-code-resolver.ts"
 import { IRestClient, REST, RouteLike } from "./types/IRestClient.ts"
 import * as R from 'result'
 
 export class RestClient implements IRestClient {
-    private rest: REST
-
-    constructor(rest: REST) {
-        this.rest = rest
-    }
+    constructor(
+        private rest: REST,
+        private errorResolver: DiscordApiCodeErrResolver
+    ){}
 
     async get<T>(route: RouteLike): Promise<Result<T, unknown, Error>> {
         try {
@@ -22,6 +22,7 @@ export class RestClient implements IRestClient {
             const r = await this.rest.post(route, { body }) 
             return R.ok<T>(r as T)
         } catch (e) {
+            const err = null
             return R.err(e) 
         }
     }

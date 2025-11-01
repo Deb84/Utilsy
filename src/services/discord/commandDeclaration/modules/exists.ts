@@ -1,14 +1,31 @@
-import {get} from './get.ts'
-import { isArray, isObject } from '../../../../utils/checkObjectType.ts'
-import type {IAccessHandler} from '../../../../handlers/types/IAccessHandler.ts'
+import * as R from 'result'
+import { isArray, isObject } from '@/utils/checkObjectType.ts'
+import { UnknownApplicationCommand } from '@/errors/discord/api/discordapi-errors.ts'
+import type { IAppCommandExists, IAppCommandGet } from './types/ICommandExists.ts'
 
-export default async (accessHandler: IAccessHandler, commandData: CommandData) => {
-    const cmds = await get(rest, accessHandler, commandData)
-    if (isArray(cmds)) {
-        if (cmds.find(cmd => cmd?.name == commandData.commandName)) return true
-        return false
-    } else if (isObject(cmds)) {
-        return true
+
+export class CommandExists implements IAppCommandExists {
+    constructor(
+        private getCommand: IAppCommandGet
+    ) {}
+
+    async exists(commandData: CommandData) {
+        const result = await this.getCommand.get(commandData)
+
+        if (result.type === 'err' && !(result.error instanceof UnknownApplicationCommand)) { // if the error is unexpected, return
+            console.error(new Error(`An error has occured while getting the app command "${commandData.commandName}"`))
+            return result
+        }
+
+        if (result.type === 'err') return R.ok(false) 
+
+        if (isArray(result.value)) {
+            if (result.value.find(cmd => cmd?.name == commandData.commandName)) return R.ok(true)
+            return R.ok(false)
+        } else if (isObject(result.value)) {
+            return R.ok(true)
+        }
+
+        return R.err(new Error('An error has occured'))
     }
-    return false
 }

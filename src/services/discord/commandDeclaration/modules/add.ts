@@ -1,26 +1,34 @@
 import * as R from 'result'
-import type { IAccessHandler } from "@/handlers/accessHandler.ts";
-import { ICommandRegistar } from "../types/ICommandDeclaration.ts";
+import { IAppCommandAdd, IAccessHandler, ICommandRegistar } from './types/ICommandAdd.ts'
 
 
-export default async (commandRegistar: ICommandRegistar, accessHandler: IAccessHandler, commandData: CommandData) => {
-    if (commandData.commandType == 'global' ) {
-        const result = await commandRegistar.registerGlobal(commandData.slashCommandBuild?.toJSON())
+export class AddCommand implements IAppCommandAdd {
+    constructor(
+        private commandRegistar: ICommandRegistar,
+        private accessHandler: IAccessHandler
+    ) {}
 
-        if (result.type === 'ok') console.log(`"${commandData.commandName}" declared at Discord REST API as a global slash command`)
-        return result
+    async add(commandData: CommandData) {
+        if (commandData.commandType == 'global' ) {
+            const result = await this.commandRegistar.registerGlobal(commandData.slashCommandBuild?.toJSON())
 
-    } else if (commandData.commandType == 'guild' && commandData.accessLevel !== 'public') {
-        const results = []
-        const commandAccess = await accessHandler.getCommandAccess(commandData) as Access
+            if (result.type === 'ok') console.log(`"${commandData.commandName}" declared at Discord REST API as a global slash command`)
+            return result // no need to recreate a result
 
-        for (const guildId of commandAccess.guildIDs) {
-            const result = await commandRegistar.registerGuild(commandData.slashCommandBuild?.toJSON(), guildId)
-            if (result.type === 'ok') console.log(`"${commandData.commandName}" declared at Discord REST API as a guild slash command for guild ${guildId}`)
-            results.push(result)
+        } else if (commandData.commandType == 'guild' && commandData.accessLevel !== 'public') {
+            const results: Result[] = []
+            const commandAccess = await this.accessHandler.getCommandAccess(commandData) as Access
+
+            for (const guildId of commandAccess.guildIDs) {
+                const result = await this.commandRegistar.registerGuild(commandData.slashCommandBuild?.toJSON(), guildId)
+                if (result.type === 'ok') console.log(`"${commandData.commandName}" declared at Discord REST API as a guild slash command for guild ${guildId}`)
+                results.push(result)
+            }
+            
+            if (results.length !== 0) return R.ok<Result[]>(results)
+            return R.err(new Error('No results, no commands declared for guilds'), commandData)
         }
-        
-        if (results.length !== 0) return R.ok(results as Result[])
-        return R.err(new Error('No results, no commands declared for guilds'), commandData)
+
+        return R.err(new Error('Unable to add the command'), commandData)
     }
 }
