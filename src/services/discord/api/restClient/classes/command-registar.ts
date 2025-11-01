@@ -1,5 +1,5 @@
-import { type APIApplicationCommand, Routes } from "discord.js";
-import type { ICommandRegistar, IRestClient } from "../types/ICommandRegistar.ts";
+import { Routes } from "discord.js";
+import type { ICommandRegistar, IRestClient, APIApplicationCommand } from "../types/ICommandRegistar.ts";
 export type {ICommandRegistar}
 
 

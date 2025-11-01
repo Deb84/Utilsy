@@ -1,6 +1,6 @@
-import * as R from 'result'
-import { isArray, isObject } from '@/utils/checkObjectType.ts'
-import { UnknownApplicationCommand } from '@/errors/discord/api/discordapi-errors.ts'
+import * as R from '../../../../utils/result/index.ts'
+import { isArray, isObject } from '../../../../utils/checkObjectType.ts'
+import { UnknownApplicationCommand } from '../../../../errors/discord/api/discordapi-errors.ts'
 import type { IAppCommandExists, IAppCommandGet } from './types/ICommandExists.ts'
 
 
@@ -13,9 +13,10 @@ export class CommandExists implements IAppCommandExists {
         const result = await this.getCommand.get(commandData)
 
         if (result.type === 'err' && !(result.error instanceof UnknownApplicationCommand)) { // if the error is unexpected, return
-            console.error(new Error(`An error has occured while getting the app command "${commandData.commandName}"`))
-            return result
+            /* console.error(new Error(`An error has occured while getting the app command "${commandData.commandName}"`)) */
+            return R.ok(false, result) // remake the error recognition system
         }
+        
 
         if (result.type === 'err') return R.ok(false) 
 

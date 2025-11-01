@@ -1,5 +1,5 @@
-import { isArray } from "@/utils/checkObjectType.ts";
-import * as R from 'result'
+import { isArray } from "../../../../utils/checkObjectType.ts";
+import * as R from '../../../../utils/result/index.ts'
 import type { IAppCommandRemove, IAppCommandGet, ICommandRegistar, APIApplicationCommand } from "./types/ICommandRemove.ts";
 
 

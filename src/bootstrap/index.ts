@@ -1,6 +1,8 @@
 import { Container  } from "inversify"
 import { Client, REST } from "discord.js"
 
+import { DiscordApiCodeErrResolver } from "../errors/discord/api/discordapi-err-code-resolver.ts"
+
 import {SlashCommandInit, type ISlashCmdInit} from "./slashCmdInit.ts"
 import { initDiscordInfos } from "../services/discordInfos/discordInfos.ts"
 import { embedBuildInit } from "../utils/embedBuilder/embedBuilder.ts"
@@ -10,7 +12,12 @@ import { AccessHandler, type IAccessHandler } from "../handlers/accessHandler.ts
 import { CommandHandler, type ICommandHandler } from "../handlers/commandHandler.ts"
 import {InteractionHandler, type IInteractionHandler} from "../handlers/interactionHandler.ts"
 import {EventHandler, type IEventHandlers} from "../handlers/eventHandler.ts"
-import SlashCmdDeclaration from "../services/slashCmdDeclaration/index.ts"
+
+import { RestClient, type IRestClient } from "../services/discord/api/restClient/rest-client.ts"
+import { CommandRegistar, type ICommandRegistar } from "../services/discord/index.ts"
+import { CommandDeclaration } from "../services/discord/commandDeclaration/command-declaration.ts"
+
+
 import { config } from "../config/index.ts"
 
 
@@ -23,6 +30,9 @@ export default (client: Client) => {
     c.bind('Config').toConstantValue(config)
     c.bind('Client').toConstantValue(client)
 
+    c.bind('DiscordErrorResolver').toDynamicValue(() => new DiscordApiCodeErrResolver())
+
+
     c.bind('CommandsFsUtils').toDynamicValue(() => new CommandsFsUtils(config))
 
     c.bind<IAccessHandler>('AccessHandler').toDynamicValue(() => new AccessHandler(config))
@@ -31,16 +41,19 @@ export default (client: Client) => {
 
     c.bind<IInteractionHandler>('InteractionHandler').toDynamicValue(() => new InteractionHandler(c.get('CommandHandler')))
 
+    c.bind('RestClient').toDynamicValue(() => new RestClient(rest, c.get('DiscordErrorResolver')))
+    c.bind('CommandRegistar').toDynamicValue(() => new CommandRegistar(c.get('RestClient'), config.env))
 
-    c.bind('SlashCmdDeclaration').toDynamicValue(() => new SlashCmdDeclaration(rest, c.get('AccessHandler')))
-
-    c.bind<ISlashCmdInit>('SlashCommandInit').toDynamicValue(() => new SlashCommandInit(c.get('CommandsFsUtils'), c.get('SlashCmdDeclaration')))
+    c.bind('CommandDeclaration').toDynamicValue(() => new CommandDeclaration(c.get('CommandRegistar'), c.get('AccessHandler')))
 
 
+    c.bind<ISlashCmdInit>('SlashCommandInit').toDynamicValue(() => new SlashCommandInit(c.get('CommandsFsUtils'), c.get('CommandDeclaration')))
 
     c.bind<IEventHandlers>('EventHandler').toDynamicValue(() => new EventHandler(config, client, container))
 
     c.get<IEventHandlers>('EventHandler').handle()
+
+    c.get<ISlashCmdInit>('SlashCommandInit').declare()
     initDiscordInfos(client)
     embedBuildInit(config)
     slashCmdAutoBuilderInit()

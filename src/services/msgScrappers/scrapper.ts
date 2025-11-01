@@ -1,6 +1,6 @@
 import { Message } from "discord.js"
 import { stat, mkdir, writeFile, readFile } from "fs/promises"
-import type { configType } from "./types"
+import type { configType } from "./types.ts"
 import rawConfig from "./config.local.json" with { type: "json"}
 import path from "path"
 

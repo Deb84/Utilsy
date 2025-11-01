@@ -1,6 +1,6 @@
 import { APIApplicationCommand } from "discord.js";
 import type { IRestClient } from "./IRestClient.ts";
-export type {IRestClient}
+export type {IRestClient, APIApplicationCommand}
 
 export interface ICommandRegistar {
     registerGlobal: (commandJson: unknown) => Promise<Result>

@@ -1,17 +1,18 @@
 import type { ICommandDeclaration, ICommandRegistar, IAccessHandler } from "./types/ICommandDeclaration.ts"
-import * as Module from './modules/index.ts'
+import * as Modules from './modules/index.ts'
+export {ICommandDeclaration}
 
 export class CommandDeclaration implements ICommandDeclaration {
-    private addCommand: Module.AddCommand
-    private getCommand: Module.GetCommand
-    private commandExists: Module.CommandExists
-    private removeCommand: Module.RemoveCommand
+    private addCommand: Modules.AddCommand
+    private getCommand: Modules.GetCommand
+    private commandExists: Modules.CommandExists
+    private removeCommand: Modules.RemoveCommand
 
     constructor(private commandRegistar: ICommandRegistar, private accessHandler: IAccessHandler) {
-        this.addCommand = new Module.AddCommand(commandRegistar, accessHandler)
-        this.getCommand = new Module.GetCommand(commandRegistar, accessHandler)
-        this.commandExists = new Module.CommandExists(this.getCommand)
-        this.removeCommand = new Module.RemoveCommand(this.getCommand, commandRegistar)
+        this.addCommand = new Modules.AddCommand(commandRegistar, accessHandler)
+        this.getCommand = new Modules.GetCommand(commandRegistar, accessHandler)
+        this.commandExists = new Modules.CommandExists(this.getCommand)
+        this.removeCommand = new Modules.RemoveCommand(this.getCommand, commandRegistar)
     }
 
     add(commandData: CommandData) {

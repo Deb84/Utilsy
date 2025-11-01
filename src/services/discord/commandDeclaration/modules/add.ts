@@ -1,5 +1,5 @@
-import * as R from 'result'
-import { IAppCommandAdd, IAccessHandler, ICommandRegistar } from './types/ICommandAdd.ts'
+import * as R from '../../../../utils/result/index.ts'
+import type { IAppCommandAdd, IAccessHandler, ICommandRegistar } from './types/ICommandAdd.ts'
 
 
 export class AddCommand implements IAppCommandAdd {
