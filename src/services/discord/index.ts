@@ -1,0 +1,1 @@
+export { CommandRegistar, type ICommandRegistar } from "./api/restClient/classes/command-registar.ts";

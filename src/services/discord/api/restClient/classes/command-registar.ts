@@ -1,5 +1,6 @@
-import { ApplicationCommand, Routes } from "discord.js";
+import { type ApplicationCommand, Routes } from "discord.js";
 import type { ICommandRegistar, IRestClient } from "../types/ICommandRegistar.ts";
+export type {ICommandRegistar}
 
 
 export class CommandRegistar implements ICommandRegistar {

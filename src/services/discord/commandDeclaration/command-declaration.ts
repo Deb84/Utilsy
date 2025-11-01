@@ -1,11 +1,11 @@
-import type { ICommandDeclaration, IAccessHandler, REST } from "./types/ICommandDeclaration"
+import type { ICommandDeclaration, ICommandRegistar, IAccessHandler } from "./types/ICommandDeclaration"
 
 export class CommandDeclaration implements ICommandDeclaration {
-    private rest: REST
+    private commandRegistar: ICommandRegistar
     private accessHandler: IAccessHandler
 
-    constructor(rest: REST, accessHandler: IAccessHandler) {
-        this.rest = rest
+    constructor(commandRegistar: ICommandRegistar, accessHandler: IAccessHandler) {
+        this.commandRegistar = commandRegistar
         this.accessHandler = accessHandler
     }
 
