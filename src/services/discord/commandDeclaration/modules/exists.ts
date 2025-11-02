@@ -1,6 +1,6 @@
-import * as R from '../../../../utils/result/index.ts'
-import { isArray, isObject } from '../../../../utils/checkObjectType.ts'
-import { UnknownApplicationCommand } from '../../../../errors/discord/api/discordapi-errors.ts'
+import * as R from '@/utils/result/index.ts'
+import { isArray, isObject } from '@/utils/checkObjectType.ts'
+import { UnknownApplicationCommand } from '@/errors/discord/api/discordapi-errors.ts'
 import type { IAppCommandExists, IAppCommandGet } from './types/ICommandExists.ts'
 
 
