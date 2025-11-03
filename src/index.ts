@@ -7,5 +7,5 @@ import { config } from './config/index.ts'
 const client = new Client({ intents: config.intents });
 client.login(process.env.AUTH);
 
-bootstrap(client)
+bootstrap()
 

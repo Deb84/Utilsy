@@ -1,4 +1,4 @@
-import * as R from '../../../../utils/result/index.ts'
+import * as R from 'result'
 import type { IAppCommandGet, APIApplicationCommand, ICommandRegistar, IAccessHandler } from './types/ICommandGet.ts'
 
 

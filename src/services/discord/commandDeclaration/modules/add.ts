@@ -1,4 +1,4 @@
-import * as R from '../../../../utils/result/index.ts'
+import * as R from 'result'
 import type { IAppCommandAdd, IAccessHandler, ICommandRegistar } from './types/ICommandAdd.ts'
 
 
