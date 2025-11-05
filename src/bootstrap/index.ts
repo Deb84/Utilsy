@@ -15,7 +15,7 @@ import {InteractionHandler, type IInteractionHandler} from "../handlers/interact
 import { CommandHandler, type ICommandHandler } from "../handlers/commandHandler.ts"
 
 // services imports
-import { initDiscordInfos } from "../services/discordInfos/discordInfos.ts"
+import { discordInfos } from "@/services/discord/discordInfos/discordInfos.ts"
 import { CommandDeclaration, type ICommandDeclaration } from "../services/discord/commandDeclaration/command-declaration.ts"
 import { CommandRegistar, type ICommandRegistar } from "../services/discord/index.ts"
 
@@ -71,7 +71,7 @@ export default async () => {
     c.get<IEventHandlers>('EventHandler').handle()
 
     c.get<ISlashCmdInit>('SlashCommandInit').declare()
-    initDiscordInfos(client)
+    // discord infos
     embedBuildInit(config)
     slashCmdAutoBuilderInit()
 

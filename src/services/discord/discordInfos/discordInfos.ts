@@ -8,10 +8,8 @@ import {
 } from "./modules/index.ts";
 
 
-class discordInfos {
-    private client: Client
-
-    constructor(client: Client) {
+export class discordInfos {
+    constructor(private client: Client) {
         this.client = client
     }
 
@@ -33,16 +31,4 @@ class discordInfos {
     async getUser(userId: string) {
         return getUserMod(this.client, userId)
     }
-}
-
-
-let instance: discordInfos | null = null
-
-export function initDiscordInfos(client: Client) {
-    if (!instance) instance = new discordInfos(client)
-}
-
-export function getDiscordInfos() {
-    if (!instance) throw new Error('discordInfos not initialized')
-    return instance
 }
