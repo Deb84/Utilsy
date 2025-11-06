@@ -4,8 +4,8 @@ import * as R from 'result'
 
 export default async (client: Client, channelId: string): Promise<Result<Channel>> => {
     try {
-        const result = await client.channels.fetch(channelId, {allowUnknownGuild: true})
-        if (result) return R.ok(result)
+        const channel = await client.channels.fetch(channelId, {allowUnknownGuild: true})
+        if (channel) return R.ok(channel)
         return R.err(new UnknownChannel(undefined, {channelId: channelId}))
     } catch (e) {
         return R.err(e instanceof Error ? e : new Error(String(e)))
