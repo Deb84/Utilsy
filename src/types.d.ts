@@ -1,5 +1,6 @@
-import type { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js"
+import type { ChatInputCommandInteraction, CommandInteraction, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js"
 import intents from "./config/intents.ts"
+import { Command } from "./commands/types/CommandAb.ts"
 
 declare global {
     // global enums
@@ -61,8 +62,17 @@ declare global {
         slashCommandBuild?: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder
     }
 
-    export interface Command {
-        data: CommandData
-        execute: (interaction: ChatInputCommandInteraction) => Promise<void>
+    export interface ICommandClass {
+        new (...args: any[]): Command;
+        name: string;
+        description: string;
+        accessLevel: AccessLevel;
+        commandType: CommandType;
+        slashCommandBuild?: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
+    }
+
+
+    export interface CommandModule {
+        default: Command
     }
 }

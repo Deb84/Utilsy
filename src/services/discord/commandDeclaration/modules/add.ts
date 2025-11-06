@@ -8,27 +8,27 @@ export class AddCommand implements IAppCommandAdd {
         private accessHandler: IAccessHandler
     ) {}
 
-    async add(commandData: CommandData) {
-        if (commandData.commandType == 'global' ) {
-            const result = await this.commandRegistar.registerGlobal(commandData.slashCommandBuild?.toJSON())
+    async add(command: ICommandClass) {
+        if (command.commandType == 'global' ) {
+            const result = await this.commandRegistar.registerGlobal(command.slashCommandBuild?.toJSON())
 
-            if (result.type === 'ok') console.log(`"${commandData.commandName}" declared at Discord REST API as a global slash command`)
+            if (result.type === 'ok') console.log(`"${command.name}" declared at Discord REST API as a global slash command`)
             return result // no need to recreate a result
 
-        } else if (commandData.commandType == 'guild' && commandData.accessLevel !== 'public') {
+        } else if (command.commandType == 'guild' && command.accessLevel !== 'public') {
             const results: Result[] = []
-            const commandAccess = await this.accessHandler.getCommandAccess(commandData) as Access
+            const commandAccess = await this.accessHandler.getCommandAccess(command) as Access
 
             for (const guildId of commandAccess.guildIDs) {
-                const result = await this.commandRegistar.registerGuild(commandData.slashCommandBuild?.toJSON(), guildId)
-                if (result.type === 'ok') console.log(`"${commandData.commandName}" declared at Discord REST API as a guild slash command for guild ${guildId}`)
+                const result = await this.commandRegistar.registerGuild(command.slashCommandBuild?.toJSON(), guildId)
+                if (result.type === 'ok') console.log(`"${command.name}" declared at Discord REST API as a guild slash command for guild ${guildId}`)
                 results.push(result)
             }
             
             if (results.length !== 0) return R.ok<Result[]>(results)
-            return R.err(new Error('No results, no commands declared for guilds'), commandData)
+            return R.err(new Error('No results, no commands declared for guilds'), command)
         }
 
-        return R.err(new Error('Unable to add the command'), commandData)
+        return R.err(new Error('Unable to add the command'), command)
     }
 }

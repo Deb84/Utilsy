@@ -11,35 +11,35 @@ export class RemoveCommand implements IAppCommandRemove {
     ) {}
 
 
-    async remove(commandData: CommandData) {
-        if (commandData.commandType == 'global' ) {
-            const errStr = `Unable to remove the global command ${commandData.commandName}`
-            const result = await this.getCommand.get(commandData)
+    async remove(command: ICommandClass) {
+        if (command.commandType == 'global' ) {
+            const errStr = `Unable to remove the global cmd ${command.name}`
+            const result = await this.getCommand.get(command)
             if (result.type === 'err') {
                 console.error(`${errStr} (get failure)`)
                 return result
             }
 
-            const command = result.value
+            const cmd = result.value
             let rmvResult: Result | null = null
 
-            if (command && !isArray(command)) {
-                rmvResult = await this.commandRegistar.removeGlobal(command.id)
+            if (cmd && !isArray(cmd)) {
+                rmvResult = await this.commandRegistar.removeGlobal(cmd.id)
             }
             
             if (rmvResult?.type === 'ok') {
-                console.log(`Request sent to the Discord REST API to remove "${commandData.commandName}" global slash command`)
+                console.log(`Request sent to the Discord REST API to remove "${command.name}" global slash cmd`)
                 return R.ok(rmvResult)
             }
             
             console.error(errStr)
             return R.err(new Error(errStr))
 
-        } else if (commandData.commandType == 'guild' && commandData.accessLevel !== 'public') {
-            // a guild command, if added on mutliple guild, can have multiple instances with different ids, get() get them
+        } else if (command.commandType == 'guild' && command.accessLevel !== 'public') {
+            // a guild cmd, if added on mutliple guild, can have multiple instances with different ids, get() get them
 
-            const errStr = `Unable to remove the guild command ${commandData.commandName}`
-            let result = await this.getCommand.get(commandData)
+            const errStr = `Unable to remove the guild cmd ${command.name}`
+            let result = await this.getCommand.get(command)
 
             if (result.type === 'err') {
                 console.error(`${errStr} (get failure)`)
@@ -50,13 +50,13 @@ export class RemoveCommand implements IAppCommandRemove {
             let rmvResults: Result[] = []
 
             if (commands && isArray(commands)) { 
-                for (const command of commands) { 
-                    if (!command.guild_id) continue
+                for (const cmd of commands) { 
+                    if (!cmd.guild_id) continue
 
-                    const rmvResult = await this.commandRegistar.removeGuild(command.guild_id, command.id)
+                    const rmvResult = await this.commandRegistar.removeGuild(cmd.guild_id, cmd.id)
                     rmvResults.push(rmvResult)
                     
-                    if (rmvResult.type === 'ok') console.log(`Request sent to the Discord REST API to remove "${commandData.commandName}" guild slash command for the guild ${command.guild_id}`)
+                    if (rmvResult.type === 'ok') console.log(`Request sent to the Discord REST API to remove "${command.name}" guild slash cmd for the guild ${cmd.guild_id}`)
                     continue
                 }
             }

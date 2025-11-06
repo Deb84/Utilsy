@@ -4,18 +4,22 @@ import type {
     IAccessHandler, 
     ICommandsFsUtils, 
     Client, 
-    ChatInputCommandInteraction 
+    ChatInputCommandInteraction,
+    Container
 } from "./types/ICommandHandler.ts";
 export type {ICommandHandler}
 
 // utilser client.command.set
 
 export class CommandHandler implements ICommandHandler {
-    private commandsFsUtils: ICommandsFsUtils
-    private accessHandler: IAccessHandler
-    private client: Client
 
-    constructor(commandsFsUtils: ICommandsFsUtils, accessHandler: IAccessHandler, client: Client) {
+
+    constructor(
+        private commandsFsUtils: ICommandsFsUtils, 
+        private accessHandler: IAccessHandler, 
+        private client: Client,
+        private container: Container
+    ) {
         this.commandsFsUtils = commandsFsUtils
         this.accessHandler = accessHandler
         this.client = client
@@ -25,9 +29,21 @@ export class CommandHandler implements ICommandHandler {
     async handle(commandInteraction: ChatInputCommandInteraction) {
         const expectedName = commandInteraction.commandName
         const command = await this.commandsFsUtils.importCommand(expectedName)
+
         if (command) {
-            if (await this.accessHandler.hasCommandAccess(commandInteraction, command.data.accessLevel)) {
-                command.execute(commandInteraction)
+
+            const deps = []
+                if (command.deps) {
+                    for (const dep of command.deps) {
+                        deps.push(this.container.get(dep))
+                    }
+                }
+
+            const cls = new command.default(...deps)
+
+            
+            if (await this.accessHandler.hasCommandAccess(commandInteraction, command.default.accessLevel)) {
+                cls.execute(commandInteraction)
             } else {
                 commandInteraction.reply("you don't have access to this")
             }

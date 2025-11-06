@@ -52,7 +52,7 @@ export default async () => {
     // Handlers
     c.bind<IAccessHandler>('AccessHandler').toDynamicValue(() => new AccessHandler(config))
 
-    c.bind<ICommandHandler>('CommandHandler').toDynamicValue(() => new CommandHandler(c.get('CommandsFsUtils'), c.get<IAccessHandler>('AccessHandler'), client))
+    c.bind<ICommandHandler>('CommandHandler').toDynamicValue(() => new CommandHandler(c.get('CommandsFsUtils'), c.get<IAccessHandler>('AccessHandler'), client, container))
 
     c.bind<IInteractionHandler>('InteractionHandler').toDynamicValue(() => new InteractionHandler(c.get<ICommandHandler>('CommandHandler')))
 

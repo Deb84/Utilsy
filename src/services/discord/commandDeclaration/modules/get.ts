@@ -10,15 +10,15 @@ export class GetCommand implements IAppCommandGet {
     ) {}
 
     // need to refactor the params 
-    async getAll(commandData: CommandData) {
-        if (commandData.commandType == 'global') {
+    async getAll(command: ICommandClass) {
+        if (command.commandType == 'global') {
             return await this.commandRegistar.getGlobalAll() // return a result pattern directly
 
         } 
         
-        if (commandData.commandType == 'guild' && commandData.accessLevel !== 'public') {
+        if (command.commandType == 'guild' && command.accessLevel !== 'public') {
             const commandsArray: APIApplicationCommand[] = []
-            const commandAccess = await this.accessHandler.getCommandAccess(commandData) as Access
+            const commandAccess = await this.accessHandler.getCommandAccess(command) as Access
 
             for (const guildId of commandAccess.guildIDs) {
                 const result = await this.commandRegistar.getGuildAll(guildId)
@@ -32,32 +32,32 @@ export class GetCommand implements IAppCommandGet {
 
             return commandsArray.length !== 0 
                 ? R.ok<APIApplicationCommand[]>(commandsArray)
-                : R.err(new Error('Unable to find the commands on the guilds'), commandData) // return an array of commands for each guild
+                : R.err(new Error('Unable to find the commands on the guilds'), command) // return an array of commands for each guild
         }
 
-        const errStr = `Unable to get the command "${commandData.commandName}"`
+        const errStr = `Unable to get the cmd "${command.name}"`
         console.error(errStr)
         return R.err(new Error(errStr))
     }
 
 
-    async get(commandData: CommandData) {
-        const result = await this.getAll(commandData)
+    async get(command: ICommandClass) {
+        const result = await this.getAll(command)
         if (result.type === 'err') return result
 
-        if (commandData.commandType == 'global') {
-            const command = result.value.find(c => c.name === commandData.commandName)
-            return command 
-                ? R.ok<APIApplicationCommand>(command) 
-                : R.err(new Error('Unable to found the expected command'))
+        if (command.commandType == 'global') {
+            const cmd = result.value.find(c => c.name === command.name)
+            return cmd 
+                ? R.ok<APIApplicationCommand>(cmd) 
+                : R.err(new Error('Unable to found the expected cmd'))
 
-        } else if (commandData.commandType == 'guild' && commandData.accessLevel !== 'public') {
-            const commands = result.value.filter(c => c.name === commandData.commandName)
+        } else if (command.commandType == 'guild' && command.accessLevel !== 'public') {
+            const commands = result.value.filter(c => c.name === command.name)
             return commands.length
                 ? R.ok<APIApplicationCommand[]>(commands)
-                : R.err(new Error('Unable to find the expected command in the guilds'))
+                : R.err(new Error('Unable to find the expected cmd in the guilds'))
         }
         
-        return R.err(new Error('Invalid commandData'))
+        return R.err(new Error('Invalid command'))
     }
 }

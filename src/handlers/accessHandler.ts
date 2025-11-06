@@ -61,9 +61,9 @@ export class AccessHandler implements IAccessHandler {
         return false 
     }
 
-    async getCommandAccess(commandData: CommandData): Promise<Access | 'public'> {
+    async getCommandAccess(command: ICommandClass): Promise<Access | 'public'> {
         const { accessConfig } = await this.config.globalConfig()
-        const accessLevel = commandData.accessLevel
+        const accessLevel = command.accessLevel
         return accessConfig[accessLevel]
     }
 }

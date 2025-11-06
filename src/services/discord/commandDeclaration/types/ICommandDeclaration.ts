@@ -4,10 +4,10 @@ import type { IAccessHandler } from "../../../../handlers/types/IAccessHandler.t
 export type {ICommandRegistar, IAccessHandler}
 
 export interface ICommandDeclaration {
-  add: (commandData: CommandData) => Promise<Result>
-  remove: (commandData: CommandData) => Promise<Result>
-  get: (commandData: CommandData) => Promise<
+  add: (command: ICommandClass) => Promise<Result>
+  remove: (command: ICommandClass) => Promise<Result>
+  get: (command: ICommandClass) => Promise<
     Result<APIApplicationCommand | (APIApplicationCommand | undefined)[] | undefined>
   >
-  exists: (commandData: CommandData) => Promise<Result<boolean>>
+  exists: (command: ICommandClass) => Promise<Result<boolean>>
 }

@@ -1,3 +1,4 @@
+import { Command } from "@/commands/types/CommandAb.ts"
 import type { ISlashCmdInit, ICommandsFsUtils, ICommandDeclaration } from "./types/ISlashCmdInit.ts"
 export type {ISlashCmdInit}
 
@@ -12,9 +13,11 @@ export class SlashCommandInit implements ISlashCmdInit {
 
     async declare() {
         const commands = await this.commandFsUtils.importAllCommands({noCache: true})
-
+        console.log(commands)
         for (const command of commands) {
-            const commandData = command.data
+            const commandData = command.default
+
+            if (!(command instanceof Command)) continue
 
             const existResult = await this.commandDeclaration.exists(commandData)
             if (existResult.type === 'ok' && existResult.value === false) {

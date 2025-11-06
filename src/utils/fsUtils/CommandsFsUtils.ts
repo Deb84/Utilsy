@@ -1,7 +1,7 @@
 import {readdir} from 'fs/promises'
 import path from 'path'
 import { pathToFileURL } from 'url';
-import type {ICommandsFsUtils, GetCommandsSettings, CommandEntry, Dirent} from './types/ICommandsFsUtils.ts'
+import type {ICommandsFsUtils, GetCommandsSettings, CommandEntry, Dirent, ICommand} from './types/ICommandsFsUtils.ts'
 
 
 // CBU (Can Be Upgraded):
@@ -9,11 +9,10 @@ import type {ICommandsFsUtils, GetCommandsSettings, CommandEntry, Dirent} from '
 
 
 export class CommandsFsUtils implements ICommandsFsUtils {
-    private config: BotConfig
     private commandsPath: string
     private entryPoint: string
 
-    constructor(config: BotConfig) {
+    constructor(private config: BotConfig) {
         this.config = config
         this.commandsPath = config.paths.commands
         this.entryPoint = 'index'
@@ -71,13 +70,13 @@ export class CommandsFsUtils implements ICommandsFsUtils {
             const url = !settings?.noCache 
                 ? pathToFileURL(filePath).href
                 : pathToFileURL(filePath).href + '?update=' + Date.now()
-            const module = await import(url)
-            return module.default as Command
+            const module = await import(url) as ICommand
+            return module
         }
     }
 
     async importAllCommands(settings?: {noCache?: boolean}) {
-        const commandsArr: Command[] = []
+        const commandsArr = []
         const commands = await this.getCommands({toLowerCase: true})
         for (const command of commands) {
             const cmdMod = await this.importCommand(command.name, {noCache: settings?.noCache, file: command.file}) 

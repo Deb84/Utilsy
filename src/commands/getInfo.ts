@@ -1,5 +1,4 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js"
-import {getDiscordInfos} from '../services/discordInfos/discordInfos.ts'
+/** import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js"
 import {getEmbedBuild} from '../utils/embedBuilder/embedBuilder.ts'
 import {getSlashCmdAutoBuilder} from '../utils/slashCommandBuilder/slashCmdAutoBuilder.ts'
 import type { BuildCommandData, Command } from "../types/enums.types.ts";
@@ -87,7 +86,7 @@ const sCD = buildCommandData
             ) */
 
 
-const build = getSlashCmdAutoBuilder().buildFromData(buildCommandData)
+/* const build = getSlashCmdAutoBuilder().buildFromData(buildCommandData)
 
 const command: Command = {
     data: {
@@ -119,5 +118,5 @@ async function execute(interaction: ChatInputCommandInteraction) {
             
             /* reply(await embedBuild.buildFromTemplate('getInfoTemplate', 'user', await dcInfo.getUser(opt ?? interaction.user.id))) */
 
-    }
-}
+/*     }
+} */

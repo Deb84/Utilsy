@@ -3,5 +3,5 @@ export {IAppCommandGet}
 
 
 export interface IAppCommandExists {
-    exists: (commandData: CommandData) => Promise<Result<boolean>>
+    exists: (command: ICommandClass) => Promise<Result<boolean>>
 }

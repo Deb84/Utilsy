@@ -4,6 +4,6 @@ import type { ICommandRegistar } from "../../types/ICommandDeclaration.ts"
 export type {APIApplicationCommand, IAccessHandler, ICommandRegistar}
 
 export interface IAppCommandGet {
-    getAll: (commandData: CommandData) => Promise<Result<APIApplicationCommand| APIApplicationCommand[]>>
-    get: (commandData: CommandData) => Promise<Result<APIApplicationCommand | APIApplicationCommand[]>>
+    getAll: (command: ICommandClass) => Promise<Result<APIApplicationCommand| APIApplicationCommand[]>>
+    get: (command: ICommandClass) => Promise<Result<APIApplicationCommand | APIApplicationCommand[]>>
 }

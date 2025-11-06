@@ -15,19 +15,19 @@ export class CommandDeclaration implements ICommandDeclaration {
         this.removeCommand = new Modules.RemoveCommand(this.getCommand, commandRegistar)
     }
 
-    add(commandData: CommandData) {
-        return this.addCommand.add(commandData) // need to handle error below
+    add(command: ICommandClass) {
+        return this.addCommand.add(command) // need to handle error below
     }
 
-    remove(commandData: CommandData) {
-        return this.removeCommand.remove(commandData) // need to handle error below
+    remove(command: ICommandClass) {
+        return this.removeCommand.remove(command) // need to handle error below
     }
 
-    async get(commandData: CommandData) {
-        return await this.getCommand.get(commandData)
+    async get(command: ICommandClass) {
+        return await this.getCommand.get(command)
     }
 
-    async exists(commandData: CommandData) {
-        return await this.commandExists.exists(commandData)
+    async exists(command: ICommandClass) {
+        return await this.commandExists.exists(command)
     }
 }

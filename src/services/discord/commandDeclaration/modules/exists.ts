@@ -9,11 +9,11 @@ export class CommandExists implements IAppCommandExists {
         private getCommand: IAppCommandGet
     ) {}
 
-    async exists(commandData: CommandData) {
-        const result = await this.getCommand.get(commandData)
+    async exists(command: ICommandClass) {
+        const result = await this.getCommand.get(command)
 
         if (result.type === 'err' && !(result.error instanceof UnknownApplicationCommand)) { // if the error is unexpected, return
-            /* console.error(new Error(`An error has occured while getting the app command "${commandData.commandName}"`)) */
+            /* console.error(new Error(`An error has occured while getting the app command "${command.commandName}"`)) */
             return R.ok(false, result) // remake the error recognition system
         }
         
@@ -21,7 +21,7 @@ export class CommandExists implements IAppCommandExists {
         if (result.type === 'err') return R.ok(false) 
 
         if (isArray(result.value)) {
-            if (result.value.find(cmd => cmd?.name == commandData.commandName)) return R.ok(true)
+            if (result.value.find(cmd => cmd?.name == command.name)) return R.ok(true)
             return R.ok(false)
         } else if (isObject(result.value)) {
             return R.ok(true)

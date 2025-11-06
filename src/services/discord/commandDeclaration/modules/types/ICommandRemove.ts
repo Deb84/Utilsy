@@ -6,5 +6,5 @@ export type {ICommandRegistar, IAppCommandGet, APIApplicationCommand}
 
 
 export interface IAppCommandRemove {
-    remove: (commandData: CommandData) => Promise<Result>
+    remove: (command: ICommandClass) => Promise<Result>
 }
