@@ -60,10 +60,10 @@ export default async () => {
 
     // services
     c.bind<ICommandRegistar>('CommandRegistar').toDynamicValue(() => new CommandRegistar(c.get<IRestClient>('RestClient'), config.env))
-
     c.bind<ICommandDeclaration>('CommandDeclaration').toDynamicValue(() => new CommandDeclaration(c.get<ICommandRegistar>('CommandRegistar'), c.get<IAccessHandler>('AccessHandler')))
-
     c.bind<ISlashCmdInit>('SlashCommandInit').toDynamicValue(() => new SlashCommandInit(c.get('CommandsFsUtils'), c.get<ICommandDeclaration>('CommandDeclaration')))
+
+    c.bind('DiscordInfos').toDynamicValue(() => new discordInfos(client))
 
 
     // exe
