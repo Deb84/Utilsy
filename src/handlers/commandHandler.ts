@@ -1,8 +1,9 @@
-
+import { NoPermissionCmd } from "@/errors/showable/command-errors.ts";
 import type { 
     ICommandHandler, 
     IAccessHandler, 
     ICommandsFsUtils, 
+    IErrorManager,
     Client, 
     ChatInputCommandInteraction,
     Container
@@ -17,6 +18,7 @@ export class CommandHandler implements ICommandHandler {
     constructor(
         private commandsFsUtils: ICommandsFsUtils, 
         private accessHandler: IAccessHandler, 
+        private errorManager: IErrorManager,
         private client: Client,
         private container: Container
     ) {
@@ -45,7 +47,13 @@ export class CommandHandler implements ICommandHandler {
             if (await this.accessHandler.hasCommandAccess(commandInteraction, command.default.accessLevel)) {
                 cls.execute(commandInteraction)
             } else {
-                commandInteraction.reply("you don't have access to this")
+                const err = new NoPermissionCmd({
+                    commandName: command.default.name,
+                    userId: commandInteraction.user.id,
+                    interaction: commandInteraction
+                })
+                console.log(err)
+                this.errorManager.manage(err)
             }
         }
     }
