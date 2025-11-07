@@ -1,7 +1,6 @@
 import {readdirSync} from 'fs'
 import path from 'path'
 import { pathToFileURL } from 'url'
-import type { BotConfig, EmbedTemplate } from '../../../types/enums.types.ts'
 
 
 export default async (fileName: string, templatePath: string) => {
@@ -17,5 +16,5 @@ export default async (fileName: string, templatePath: string) => {
         }
     }
     const result = await read(templatePath)
-    if (result) return result as EmbedTemplate
+    if (result) return result
 }

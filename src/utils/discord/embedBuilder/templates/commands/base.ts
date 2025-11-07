@@ -1,5 +1,4 @@
 import { EmbedBuilder } from "discord.js"
-import type { BotConfig } from "../../../../types/enums.types.ts"
 
 export async function getEmbed(config: BotConfig) {
     const { mainColor, botName, author } = await config.globalConfig()

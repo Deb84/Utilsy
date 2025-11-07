@@ -76,10 +76,3 @@ export interface BuildCommandData {
     sub?: BuildSubCommandData[]
     opts?: BuildCommandOptData[]
 }
-
-
-// embed templates
-export interface EmbedTemplate {
-    keys?: string[]
-    getEmbed: (config: BotConfig) => Promise<EmbedBuilder>
-}

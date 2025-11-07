@@ -1,14 +1,11 @@
-import type { Channel, Guild, Role, User } from 'discord.js'
 import getTemplates from './templates/index.ts'
-import type { BotConfig } from '../../types/enums.types.ts'
 
 const baseName = 'base'
 
 class embedBuild {
-    private config: BotConfig
     private templatePath: string
 
-    constructor(config: BotConfig) {
+    constructor(private config: BotConfig) {
         this.config = config
         this.templatePath = config.paths.embedTemplates
     }
