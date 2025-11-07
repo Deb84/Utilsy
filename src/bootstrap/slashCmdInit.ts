@@ -13,7 +13,7 @@ export class SlashCommandInit implements ISlashCmdInit {
 
     async declare() {
         const commands = await this.commandFsUtils.importAllCommands({noCache: true})
-        console.log(commands)
+
         for (const command of commands) {
             const commandData = command.default
 
