@@ -10,14 +10,14 @@ export class ErrorReplyer implements IErrorReplyer {
 
     async reply(err: ShowableError) {
         const result = await this.embedTemplatesBuilder.buildFromTemplate('Error')
-        console.log(result)
+
         if (result.type === 'err') return R.err(result.error)
 
         const embed = result.value
         embed.setDescription(err.displayedMsg)
 
         if (err.interaction.isCommand()) {
-            console.log('aa')
+
             err.interaction.reply({
                 embeds: [embed],
                 ephemeral: err.userOnly

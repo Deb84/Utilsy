@@ -1,0 +1,40 @@
+graph TD
+rest --> RestClient
+DiscordErrorResolver --> RestClient
+
+%% utils
+config --> CommandsFsUtils
+
+config --> EmbedBuilder
+
+%% manager
+ErrorReplyer --> ErrorManager
+
+%% handler
+config --> AccessHandler
+
+CommandsFsUtils --> CommandHandler
+AccessHandler --> CommandHandler
+ErrorManager --> CommandHandler
+
+CommandHandler --> InteractionHandler
+
+config --> EventHandler
+client --> EventHandler
+container --> EventHandler
+
+%% rest
+RestClient --> CommandRegistar
+config --> CommandRegistar
+
+%% services
+CommandRegistar --> CommandDeclaration
+AccessHandler --> CommandDeclaration
+
+client --> DiscordInfos
+
+EmbedBuilder --> ErrorReplyer
+
+%% bootstrap
+CommandsFsUtils --> SlashCommandInit
+CommandDeclaration --> SlashCommandInit

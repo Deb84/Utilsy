@@ -46,14 +46,13 @@ export class CommandHandler implements ICommandHandler {
             
             if (await this.accessHandler.hasCommandAccess(commandInteraction, command.default.accessLevel)) {
                 cls.execute(commandInteraction)
-            } else {
+            } else { // No access
                 const err = new NoPermissionCmd({
                     commandName: command.default.name,
                     userId: commandInteraction.user.id,
                     interaction: commandInteraction
                 })
-                console.log(err)
-                this.errorManager.manage(err)
+                this.errorManager.manage(err) 
             }
         }
     }
