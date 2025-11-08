@@ -54,10 +54,10 @@ export default async () => {
     // Utils
     c.bind('CommandsFsUtils').toDynamicValue(() => new CommandsFsUtils(config))
 
-    c.bind<IEmbedTemplatesBuilder>('EmbedBuilder').toDynamicValue(() => new EmbedTemplatesBuilder(config))
+    c.bind<IEmbedTemplatesBuilder>('EmbedTemplatesBuilder').toDynamicValue(() => new EmbedTemplatesBuilder(config))
 
     // Errors
-    c.bind('ErrorReplyer').toDynamicValue(() => new ErrorReplyer(c.get('EmbedBuilder')))
+    c.bind('ErrorReplyer').toDynamicValue(() => new ErrorReplyer(c.get('EmbedTemplatesBuilder')))
     c.bind('ErrorManager').toDynamicValue(() => new ErrorManager(c.get('ErrorReplyer')))
 
     // Handlers
