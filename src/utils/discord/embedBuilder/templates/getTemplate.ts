@@ -1,6 +1,7 @@
 import {readdirSync} from 'fs'
 import path from 'path'
 import { pathToFileURL } from 'url'
+import { IEmbedTemplate } from '../types/IEmbedTemplate.ts'
 
 // to refactor
 
@@ -10,7 +11,7 @@ export default async (fileName: string, templatePath: string) => {
     if (fileName === 'index') throw new Error(`The embed template can't be named "index"`)
     async function read(p: string) {
         const entries = readdirSync(p, {withFileTypes: true})
-        console.log(entries)
+
         for (const entry of entries) {
             if (entry.isDirectory()) {
                 const r: any = await read(path.join(entry.parentPath, entry.name))
@@ -23,5 +24,5 @@ export default async (fileName: string, templatePath: string) => {
         }
     }
     const result = await read(templatePath)
-    if (result) return result
+    if (result) return result as IEmbedTemplate
 }

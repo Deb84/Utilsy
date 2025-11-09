@@ -3,6 +3,7 @@ import * as R from 'result'
 import type { IEmbedTemplatesBuilder } from './types/IEmbedTemplatesBuilder.ts'
 export type {IEmbedTemplatesBuilder}
 
+// refactor : add abstract class for templates
 
 export class EmbedTemplatesBuilder implements IEmbedTemplatesBuilder {
     private templatePath: string
@@ -22,7 +23,7 @@ export class EmbedTemplatesBuilder implements IEmbedTemplatesBuilder {
 
     async getBase() {
         const template = await getTemplates(this.baseName, this.templatePath)
-        if (template) return R.ok(template)
+        if (template) return R.ok(await template.getEmbed(this.config))
         return R.err(new Error('Unable to get base template'))
     }
 

@@ -11,8 +11,8 @@ class cmdBye extends Command {
     static accessLevel: AccessLevel = 'test'
     static commandType: CommandType = 'guild'
     static slashCommandBuilder = new SlashCommandBuilder()
-                    .setName(this.name)
-                    .setDescription(this.description)
+                    .setName(cmdBye.name)
+                    .setDescription(cmdBye.description)
 
 
     async execute(interaction: CommandInteraction) {

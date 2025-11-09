@@ -68,7 +68,7 @@ declare global {
         description: string;
         accessLevel: AccessLevel;
         commandType: CommandType;
-        slashCommandBuild?: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
+        slashCommandBuilder?: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
     }
 
 

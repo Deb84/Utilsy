@@ -1,47 +1,77 @@
- import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js"
+import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js"
 import { Command } from "../types/CommandAb.ts"
 import { IEmbedTemplatesBuilder } from "@/utils/discord/embedBuilder/embed-templates-builder.ts"
-import buildEmbed from "./utils/build-embed.ts"
 import buildCommand from "./utils/build-command.ts"
 import * as mod from './modules/index.ts'
+import { IDiscordInfos } from "@/services/discord/discordInfos/types/IDiscordInfos.ts"
+import { IErrorManager } from "@/managers/types/IErrorManager.ts"
 
 type SubCommand = 'user' | 'guild' | 'channel' | 'role' | 'emoji' | 'message'
-type SubcommandHandler = (ETB: IEmbedTemplatesBuilder, i: ChatInputCommandInteraction) => Promise<Result<EmbedBuilder>>
+
+type Handler = (
+    deps: Deps,
+    settings: {embed: EmbedBuilder, interaction: ChatInputCommandInteraction}
+) => Promise<Result<EmbedBuilder>>
+
+type Deps = {
+  errorManager: IErrorManager
+  ETB: IEmbedTemplatesBuilder
+  discordInfos: IDiscordInfos
+}
 
 // convert mention to id
-// ETB gived to each module
 // module return the finalised embed et execute reply
-export const deps = ['EmbedTemplatesBuilder']
+export const deps = ['ErrorManager', 'EmbedTemplatesBuilder', 'DiscordInfos']
 
 class GetInfo extends Command {
-    static name = 'getInfo'
+    static name = 'getinfo'
     static description = 'Return an embed of selected informations'
     static accessLevel: AccessLevel = 'test'
     static commandType: CommandType = 'guild'
-    static slashCommandBuilder = buildCommand(new SlashCommandBuilder().setName(this.name).setDescription(this.description))
+    static slashCommandBuilder = buildCommand(new SlashCommandBuilder().setName(GetInfo.name).setDescription(GetInfo.description))
 
-    constructor(private ETB: IEmbedTemplatesBuilder) {
+    constructor(
+        private errorManager: IErrorManager,
+        private ETB: IEmbedTemplatesBuilder,
+        private discordInfos: IDiscordInfos,
+        private deps: Deps
+    ) {
         super()
+        this.deps = {
+            errorManager: this.errorManager,
+            ETB: this.ETB,
+            discordInfos: this.discordInfos
+        }
     }
 
 
     async execute(interaction: ChatInputCommandInteraction) {
-        const sub = interaction.options.getSubcommand()
+        const sub = interaction.options.getSubcommand() as SubCommand
 
-        const handlers: Record<SubCommand, SubcommandHandler> = {
-            user: (ETB, i) => mod.user(ETB, i),
-            guild: (ETB, i) => mod.user(ETB, i),
-            channel: (ETB, i) => mod.user(ETB, i),
-            role: (ETB, i) => mod.user(ETB, i),
-            emoji: (ETB, i) => mod.user(ETB, i),
-            message: (ETB, i) => mod.user(ETB, i)
+        const handlers: Record<SubCommand, Handler> = {
+            user: (...args) => mod.user(...args),
+            guild: (...args) => mod.user(...args),
+            channel: (...args) => mod.user(...args),
+            role: (...args) => mod.user(...args),
+            emoji: (...args) => mod.user(...args),
+            message: (...args) => mod.user(...args)
         }
 
         const embedR = await this.ETB.getBase()
         if (embedR.type === 'err') throw new Error('ici') // TODO return error to user 
 
-        const buildedEmbed = buildEmbed(embedR.value)
+        const handler = handlers[sub]
 
+        const buildedEmbedR = await handler(this.deps, 
+        {
+            embed: embedR.value, 
+            interaction: interaction
+        })
+
+        if (buildedEmbedR.type === 'err') throw new Error('ici2')
+
+
+        interaction.reply({embeds:[buildedEmbedR.value]})
     }
 }
 

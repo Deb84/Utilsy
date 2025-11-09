@@ -10,7 +10,7 @@ export class AddCommand implements IAppCommandAdd {
 
     async add(command: ICommandClass) {
         if (command.commandType == 'global' ) {
-            const result = await this.commandRegistar.registerGlobal(command.slashCommandBuild?.toJSON())
+            const result = await this.commandRegistar.registerGlobal(command.slashCommandBuilder?.toJSON())
 
             if (result.type === 'ok') console.log(`"${command.name}" declared at Discord REST API as a global slash command`)
             return result // no need to recreate a result
@@ -20,7 +20,7 @@ export class AddCommand implements IAppCommandAdd {
             const commandAccess = await this.accessHandler.getCommandAccess(command) as Access
 
             for (const guildId of commandAccess.guildIDs) {
-                const result = await this.commandRegistar.registerGuild(command.slashCommandBuild?.toJSON(), guildId)
+                const result = await this.commandRegistar.registerGuild(command.slashCommandBuilder?.toJSON(), guildId)
                 if (result.type === 'ok') console.log(`"${command.name}" declared at Discord REST API as a guild slash command for guild ${guildId}`)
                 results.push(result)
             }
