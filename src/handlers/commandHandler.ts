@@ -30,7 +30,7 @@ export class CommandHandler implements ICommandHandler {
 
     async handle(commandInteraction: ChatInputCommandInteraction) {
         const expectedName = commandInteraction.commandName
-        const command = await this.commandsFsUtils.importCommand(expectedName)
+        const command = await this.commandsFsUtils.importCommand(expectedName, {noCache: true})
 
         if (command) {
 

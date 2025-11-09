@@ -5,7 +5,7 @@ DiscordErrorResolver --> RestClient
 %% utils
 config --> CommandsFsUtils
 
-config --> EmbedBuilder
+config --> EmbedTemplatesBuilder
 
 %% manager
 ErrorReplyer --> ErrorManager
@@ -33,8 +33,20 @@ AccessHandler --> CommandDeclaration
 
 client --> DiscordInfos
 
-EmbedBuilder --> ErrorReplyer
+EmbedTemplatesBuilder --> ErrorReplyer
 
 %% bootstrap
 CommandsFsUtils --> SlashCommandInit
 CommandDeclaration --> SlashCommandInit
+
+
+%% Events
+client --> ClientReady
+
+InteractionHandler --> InteractionCreate
+
+%% Commands
+ErrorManager --> GetInfos
+EmbedTemplatesBuilder --> GetInfos
+DiscordInfos --> GetInfos
+

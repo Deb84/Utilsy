@@ -26,7 +26,6 @@ import { ErrorReplyer } from "@/services/discord/errorReplyer/error-replyer.ts"
 // utils imports
 import {CommandsFsUtils} from '../utils/fsUtils/CommandsFsUtils.ts'
 import { EmbedTemplatesBuilder, IEmbedTemplatesBuilder } from "@/utils/discord/embedBuilder/embed-templates-builder.ts"
-import { slashCmdAutoBuilderInit } from "@/utils/discord/slashCommandBuilder/slashCmdAutoBuilder.ts"
 
 // init imports
 import {SlashCommandInit, type ISlashCmdInit} from "./slashCmdInit.ts"
@@ -82,8 +81,6 @@ export default async () => {
     c.get<IEventHandlers>('EventHandler').handle()
 
     c.get<ISlashCmdInit>('SlashCommandInit').declare()
-
-    slashCmdAutoBuilderInit()
 
 
 

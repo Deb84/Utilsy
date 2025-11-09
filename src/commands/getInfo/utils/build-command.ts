@@ -16,6 +16,11 @@ export default (build: SlashCommandBuilder): SlashCommandSubcommandsOnlyBuilder 
                 .setName('mention')
                 .setDescription('user mention')
             )
+            .addBooleanOption(opt => 
+                opt
+                .setName('full')
+                .setDescription('return the entire user object in an embed')
+            )
         )
         .addSubcommand(cmd => 
             cmd
