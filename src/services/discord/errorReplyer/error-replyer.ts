@@ -10,11 +10,11 @@ export class ErrorReplyer implements IErrorReplyer {
     ) {}
 
     async reply(err: ShowableError) {
-        const result = await this.embedTemplatesBuilder.buildFromTemplate('Error')
+        const getEmbedRes = await this.embedTemplatesBuilder.buildFromTemplate('Error')
 
-        if (result.type === 'err') return R.err(result.error)
+        if (getEmbedRes.type === 'err') return R.err(getEmbedRes.error)
 
-        const embed = result.value
+        const embed = getEmbedRes.value
         embed.setDescription(err.message)
 
         if (err.interaction.isCommand()) {

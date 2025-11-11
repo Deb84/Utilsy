@@ -1,63 +1,64 @@
-import { GenericCmdErr } from "@/errors/showable/command-errors.ts";
-import { IErrorManager } from "@/managers/types/IErrorManager.ts";
 import { IDiscordInfos } from "@/services/discord/discordInfos/types/IDiscordInfos.ts";
-import { IEmbedTemplatesBuilder } from "@/utils/discord/embedBuilder/embed-templates-builder.ts";
 import { ChatInputCommandInteraction, EmbedBuilder, GuildMember, Role, User } from "discord.js";
 import * as R from 'result'
 
 
 export default async (deps: {
-    errorManager: IErrorManager
-    ETB: IEmbedTemplatesBuilder
     discordInfos: IDiscordInfos
 }, args: {
     embed: EmbedBuilder, 
     interaction: ChatInputCommandInteraction
 }
 ) => {
-    const i = args.interaction
-    const userId = i.options.getString('id')
-    const mention = i.options.getMentionable('mention')
-    const full = i.options.getBoolean('full')
+    const interaction = args.interaction
+    const userId = interaction.options.getString('id')
+    const mention = interaction.options.getMentionable('mention')
+    const full = interaction.options.getBoolean('full')
 
     // assert
     if (userId && mention) return R.err(new Error('Please use only one options to get the user informations'))
     if (mention && (mention instanceof Role)) return R.err(new Error('Please mention a user, not a role'))
-    if (mention && !(mention instanceof GuildMember)) return R.err(new Error('The mentionned user is not a member of the guild'))
-
+    
     // define userId
-    const newUserId = userId ? userId : mention ? mention.user.id : i.user.id
-
+    const mentionUserId = (mention instanceof GuildMember) ? mention.id : (mention instanceof User) ? mention.id : undefined // mention can only be GuildMember or User object
+    const newUserId = userId ? userId : mentionUserId ? mentionUserId : interaction.user.id
 
     const userObjR = await deps.discordInfos.getUser(newUserId) // get user object from userId
     if (userObjR.type === 'err') return R.err(new Error('Unable to find this user'), userObjR)
-    const userObj = userObjR.value // extract value from result
+    const user = userObjR.value // extract value from result
+
+    
+    //prebuid
+    const accountCreationDate = full // make this more proper
+        ? user.createdAt.toISOString().slice(0, 19).replace('T', ' at ') 
+        : user.createdAt.toISOString().slice(0, 16).replace('T', ' at ')
 
     //build
     args.embed
         .setTitle('GetInfo: user') // set thumbnail (update userinfo)
-        .setThumbnail(userObj.displayAvatarURL({size: 1024}))
+        .setThumbnail(user.displayAvatarURL({size: 2048}))
         .addFields(
-            {name: 'DisplayName', value: userObj.displayName, inline: true},
-            {name: 'Username', value: userObj.username, inline: true},
-            {name: 'Id', value: userObj.id, inline: true, },
-            {name: 'DisplayName', value: userObj.displayName, inline: true},
-            {name: 'Date of account creation', value: String(userObj.createdAt), inline: true}
+            {name: 'DisplayName', value: user.displayName, inline: true},
+            {name: 'Username', value: user.username, inline: true},
+            {name: 'Id', value: user.id, inline: true, },
+            {name: 'Date of account creation', value: accountCreationDate}
         )
 
-    if (full) args.embed
+    if (full) args.embed // full build
     .addFields(
-        {name: 'Bot', value: String(userObj.bot), inline: true},
-        {name: 'System', value: String(userObj.system), inline: true},
-        {name: 'Discriminator', value: userObj.discriminator, inline: true},
-        {name: 'Avatar (hash)', value: String(userObj.avatar), inline: true},
-        {name: 'Avatar (url)', value: String(userObj.avatarURL())},
-        {name: 'Banner (hash)', value: String(userObj.banner), inline: true},
-        {name: 'Banner (url)', value: String(userObj.bannerURL())},
-        {name: 'Tag', value: String(userObj.tag), inline: true},
-        {name: 'HexAccentColor', value: String(userObj.hexAccentColor), inline: true}
+        {name: '', value: ''},  // spacement
+        {name: 'Bot', value: String(user.bot), inline: true},
+        {name: 'System', value: String(user.system), inline: true},
+        {name: 'Discriminator', value: user.discriminator, inline: true},
+        {name: '', value: ''},  // spacement
+        {name: 'Avatar (hash)', value: String(user.avatar), inline: true},
+        {name: 'Avatar (url)', value: String(user.avatarURL({size: 2048}))},
+        {name: 'Banner (hash)', value: String(user.banner), inline: true},
+        {name: 'Banner (url)', value: String(user.bannerURL({size: 2048}))},
+        {name: '', value: ''}, // spacement
+        {name: 'Tag', value: user.tag, inline: true},
+        {name: 'HexAccentColor', value: String(user.hexAccentColor), inline: true}
     )
         
-
     return R.ok(args.embed)
 }

@@ -21,6 +21,11 @@ export default (build: SlashCommandBuilder): SlashCommandSubcommandsOnlyBuilder 
                 .setName('full')
                 .setDescription('return the entire user object in an embed')
             )
+            .addBooleanOption(opt => 
+                opt
+                .setName('ephemeral')
+                .setDescription('Only you will be able to see the response')
+            )
         )
         .addSubcommand(cmd => 
             cmd
@@ -31,6 +36,11 @@ export default (build: SlashCommandBuilder): SlashCommandSubcommandsOnlyBuilder 
                 .setName('id')
                 .setDescription('guild id (right click on a guild with developper mode enabled)')
                 .setRequired(true)
+            )
+            .addBooleanOption(opt => 
+                opt
+                .setName('ephemeral')
+                .setDescription('Only you will be able to see the response')
             )
         )
         .addSubcommand(cmd => 
@@ -47,6 +57,11 @@ export default (build: SlashCommandBuilder): SlashCommandSubcommandsOnlyBuilder 
                 .setName('mention')
                 .setDescription('channel mention')
             )
+            .addBooleanOption(opt => 
+                opt
+                .setName('ephemeral')
+                .setDescription('Only you will be able to see the response')
+            )
         )
         .addSubcommand(cmd => 
             cmd
@@ -62,6 +77,11 @@ export default (build: SlashCommandBuilder): SlashCommandSubcommandsOnlyBuilder 
                 .setName('mention')
                 .setDescription('role mention')
             )
+            .addBooleanOption(opt => 
+                opt
+                .setName('ephemeral')
+                .setDescription('Only you will be able to see the response')
+            )
         )
         .addSubcommand(cmd => 
             cmd
@@ -73,6 +93,11 @@ export default (build: SlashCommandBuilder): SlashCommandSubcommandsOnlyBuilder 
                 .setDescription('emoji id (right click on a role with developper mode enabled)')
                 .setRequired(true)
             )
+            .addBooleanOption(opt => 
+                opt
+                .setName('ephemeral')
+                .setDescription('Only you will be able to see the response')
+            )
         )
         .addSubcommand(cmd => 
             cmd
@@ -83,6 +108,11 @@ export default (build: SlashCommandBuilder): SlashCommandSubcommandsOnlyBuilder 
                 .setName('id')
                 .setDescription('message id (right click on a role with developper mode enabled)')
                 .setRequired(true)
+            )
+            .addBooleanOption(opt => 
+                opt
+                .setName('ephemeral')
+                .setDescription('Only you will be able to see the response')
             )
         )
 }

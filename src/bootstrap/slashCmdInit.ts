@@ -18,6 +18,7 @@ export class SlashCommandInit implements ISlashCmdInit {
             const commandData = command.default
 
             const existResult = await this.commandDeclaration.exists(commandData)
+
             if (existResult.type === 'ok' && existResult.value === false) {
                 this.commandDeclaration.add(commandData)
             }
