@@ -5,6 +5,7 @@ import buildCommand from "./utils/build-command.ts"
 import * as mod from './modules/index.ts'
 import { IDiscordInfos } from "@/services/discord/discordInfos/types/IDiscordInfos.ts"
 import { IErrorManager } from "@/managers/types/IErrorManager.ts"
+import { GenericCmdErr } from "@/errors/showable/command-errors.ts"
 
 type SubCommand = 'user' | 'guild' | 'channel' | 'role' | 'emoji' | 'message'
 
@@ -68,7 +69,21 @@ class GetInfo extends Command {
             interaction: interaction
         })
 
-        if (buildedEmbedR.type === 'err') throw new Error('ici2')
+        if (buildedEmbedR.type === 'err') {
+            const err = new GenericCmdErr(
+                {
+                    msg: buildedEmbedR.error.message,
+                    commandName: GetInfo.name,
+                    subCommandName: sub,
+                    userId: interaction.user.id,
+                    interaction: interaction,
+                    result: buildedEmbedR
+                }
+            )
+            console.log(err.result)
+            this.errorManager.manage(err)
+            return
+        }
 
 
         interaction.reply({embeds:[buildedEmbedR.value]})

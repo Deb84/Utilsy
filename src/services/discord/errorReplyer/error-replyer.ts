@@ -1,6 +1,7 @@
 import { ShowableError } from "@/errors/showable/base/ShowableError.ts";
 import * as R from 'result'
 import type { IErrorReplyer, IEmbedTemplatesBuilder } from "./types/IErrorReplyer.ts";
+import { MessageFlags } from "discord.js";
 
 
 export class ErrorReplyer implements IErrorReplyer {
@@ -14,13 +15,13 @@ export class ErrorReplyer implements IErrorReplyer {
         if (result.type === 'err') return R.err(result.error)
 
         const embed = result.value
-        embed.setDescription(err.displayedMsg)
+        embed.setDescription(err.message)
 
         if (err.interaction.isCommand()) {
 
             err.interaction.reply({
                 embeds: [embed],
-                ephemeral: err.userOnly
+                flags: err.ephermeral ? MessageFlags.Ephemeral : undefined
             })
         }
 

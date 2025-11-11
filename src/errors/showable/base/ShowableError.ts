@@ -7,9 +7,10 @@ export type ShowableErrorOptions = {
 
 
 export abstract class ShowableError extends Error {
-    abstract displayedMsg: string
-    abstract userOnly: boolean
+    abstract defaultMsg: string
+    abstract ephermeral: boolean
     abstract interaction: Interaction
+    abstract result: Result | undefined
 
     constructor(msg: string, options?: {
         result?: Result
