@@ -30,12 +30,16 @@ export default class Admin extends Command {
         }
     }
 
-    private async removeAllCommand() {
-        const commands = await this.commandFsUtils.importAllCommands({noCache: true})
+    private async getAllCommands() {
+        return await this.commandFsUtils.importAllCommands({noCache: true})
+    }
 
-        for (const command of commands) {
+    private async removeAllCommands(rmvadmin: boolean | null) {
+        for (const command of await this.getAllCommands()) {
             const commandData = command.default
 
+            if (commandData.name === Admin.name && !rmvadmin) continue
+            
             const existResult = await this.commandDeclaration.exists(commandData)
 
             if (existResult.type === 'ok' && existResult.value === true) {
@@ -47,9 +51,25 @@ export default class Admin extends Command {
         }
     }
 
+    private async addAllCommands() {
+        for (const command of await this.getAllCommands()) {
+            const commandData = command.default
+
+            const existResult = await this.commandDeclaration.exists(commandData)
+
+            if (existResult.type === 'ok' && existResult.value === false) {
+                this.commandDeclaration.add(commandData)
+            }
+            if (existResult.type === 'err') {
+                console.error(existResult.error)
+            }
+        }
+    }
+
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {
         const sub = interaction.options.getSubcommand()
 
-        if (sub === 'rmvcommand' && interaction.options.getBoolean('all')) this.removeAllCommand()
+        if (sub === 'rmvcommand' && interaction.options.getBoolean('all')) this.removeAllCommands(interaction.options.getBoolean('rmvadmincmd'))
+        if (sub === 'addcommand' && interaction.options.getBoolean('all')) this.addAllCommands()
     }
 }
