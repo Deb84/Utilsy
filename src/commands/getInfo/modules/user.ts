@@ -1,5 +1,5 @@
 import { IDiscordInfos } from "@/services/discord/discordInfos/types/IDiscordInfos.ts";
-import { ChatInputCommandInteraction, EmbedBuilder, GuildMember, Role, User } from "discord.js";
+import { ChatInputCommandInteraction, EmbedBuilder, GuildMember, Role, User, userMention } from "discord.js";
 import * as R from 'result'
 
 
@@ -41,7 +41,9 @@ export default async (deps: {
             {name: 'DisplayName', value: user.displayName, inline: true},
             {name: 'Username', value: user.username, inline: true},
             {name: 'Id', value: user.id, inline: true, },
-            {name: 'Date of account creation', value: accountCreationDate}
+            {name: 'Profile', value: userMention(user.id), inline: true},
+            {name: '', value: '', inline: true},
+            {name: 'Date of account creation', value: accountCreationDate, inline: true}
         )
 
     if (full) args.embed // full build

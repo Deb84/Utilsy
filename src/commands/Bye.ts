@@ -1,18 +1,15 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js"
 import { Command } from "./types/CommandAb.ts"
 
-/* async function execute(interaction: CommandInteraction) {
-    await interaction.reply('Bye!'); // reply to the interaction msg
-} */
 
-class cmdBye extends Command {
+class Bye extends Command {
     static name = 'bye'
     static description = 'Reply bye!'
     static accessLevel: AccessLevel = 'test'
     static commandType: CommandType = 'guild'
     static slashCommandBuilder = new SlashCommandBuilder()
-                    .setName(cmdBye.name)
-                    .setDescription(cmdBye.description)
+                    .setName(Bye.name)
+                    .setDescription(Bye.description)
 
 
     async execute(interaction: CommandInteraction) {
@@ -22,4 +19,4 @@ class cmdBye extends Command {
 
 
 
-export default cmdBye
+export default Bye

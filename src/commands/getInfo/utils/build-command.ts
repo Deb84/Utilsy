@@ -35,7 +35,11 @@ export default (build: SlashCommandBuilder): SlashCommandSubcommandsOnlyBuilder 
                 opt
                 .setName('id')
                 .setDescription('guild id (right click on a guild with developper mode enabled)')
-                .setRequired(true)
+            )
+            .addBooleanOption(opt => 
+                opt
+                .setName('full')
+                .setDescription('return the entire guild object in an embed')
             )
             .addBooleanOption(opt => 
                 opt

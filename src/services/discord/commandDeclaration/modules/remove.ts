@@ -29,7 +29,7 @@ export class RemoveCommand implements IAppCommandRemove {
             
             if (rmvResult?.type === 'ok') {
                 console.log(`Request sent to the Discord REST API to remove "${command.name}" global slash cmd`)
-                return R.ok(rmvResult)
+                return R.ok(command, rmvResult)
             }
             
             console.error(errStr)
@@ -61,7 +61,7 @@ export class RemoveCommand implements IAppCommandRemove {
                 }
             }
 
-            if (rmvResults.length !== 0) return R.ok<Result[]>(rmvResults)
+            if (rmvResults.length !== 0) return R.ok<ICommandClass, Result[]>(command, rmvResults)
             return R.err(new Error(`${errStr} (commands seems not exists)`))
         }
 

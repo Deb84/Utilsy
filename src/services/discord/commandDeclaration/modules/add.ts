@@ -13,7 +13,7 @@ export class AddCommand implements IAppCommandAdd {
             const result = await this.commandRegistar.registerGlobal(command.slashCommandBuilder?.toJSON())
 
             if (result.type === 'ok') console.log(`"${command.name}" declared at Discord REST API as a global slash command`)
-            return result // no need to recreate a result
+            return R.ok(command, result) // no need to recreate a result
 
         } else if (command.commandType == 'guild' && command.accessLevel !== 'public') {
             const results: Result[] = []
@@ -25,7 +25,7 @@ export class AddCommand implements IAppCommandAdd {
                 results.push(result)
             }
             
-            if (results.length !== 0) return R.ok<Result[]>(results)
+            if (results.length !== 0) return R.ok<ICommandClass, Result[]>(command, results)
             return R.err(new Error('No results, no commands declared for guilds'), command)
         }
 

@@ -1,24 +1,21 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js"
-import type { Command } from "../types/enums.types.ts";
+import { Command } from "./types/CommandAb.ts"
 
-async function execute(interaction: CommandInteraction) {
-    await interaction.reply('Hi!'); // reply to the interaction msg
+class Hi extends Command {
+    static name = 'hi'
+    static description = 'Reply Hi!'
+    static commandType: CommandType = 'global'
+    static accessLevel: AccessLevel = 'test'
+    static slashCommandBuilder = new SlashCommandBuilder()
+                    .setName(Hi.name)
+                    .setDescription(Hi.description)
+
+
+    async execute(interaction: CommandInteraction) {
+        await interaction.reply('Hi!'); // reply to the interaction msg
+    }
 }
 
-const name = 'hi'
-const description = 'Reply Hi!'
 
-const command: Command = {
-    data: {
-        commandName: name,
-        description: description,
-        commandType: "global",
-        accessLevel: "test",
-        slashCommandBuild: new SlashCommandBuilder()
-            .setName(name)
-            .setDescription(description)
-    },
-    execute
-}
 
-export default command;
+export default Hi

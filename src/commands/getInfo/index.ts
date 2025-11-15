@@ -2,7 +2,7 @@ import { ChatInputCommandInteraction, EmbedBuilder, MessageFlags, SlashCommandBu
 import { Command } from "../types/CommandAb.ts"
 import { IEmbedTemplatesBuilder } from "@/utils/discord/embedBuilder/embed-templates-builder.ts"
 import buildCommand from "./utils/build-command.ts"
-import * as mod from './modules/index.ts'
+import * as modules from './modules/index.ts'
 import { IDiscordInfos } from "@/services/discord/discordInfos/types/IDiscordInfos.ts"
 import { IErrorManager } from "@/managers/types/IErrorManager.ts"
 import { GenericCmdErr } from "@/errors/showable/command-errors.ts"
@@ -50,34 +50,31 @@ export default class GetInfo extends Command {
         const ephemeral = interaction.options.getBoolean('ephemeral')
 
         const handlers: Record<SubCommand, Handler> = {
-            user: (...args) => mod.user(...args),
-            guild: (...args) => mod.guild(...args),
-            channel: (...args) => mod.user(...args),
-            role: (...args) => mod.user(...args),
-            emoji: (...args) => mod.user(...args),
-            message: (...args) => mod.user(...args)
+            user: (...args) => modules.user(...args),
+            guild: (...args) => modules.guild(...args),
+            channel: (...args) => modules.user(...args),
+            role: (...args) => modules.user(...args),
+            emoji: (...args) => modules.user(...args),
+            message: (...args) => modules.user(...args)
         }
 
-        const getBaseRes = await this.EmbedTemplateBuilder.getBase()
-        if (getBaseRes.type === 'err') throw new Error('ici') // TODO return error to user 
+        const getBaseResult = await this.EmbedTemplateBuilder.getBase()
+        if (getBaseResult.type === 'err') throw new Error('ici') // TODO return error to user 
 
         const handler = handlers[sub]
 
-        const buildedEmbedRes = await handler(this.deps,
+        const buildedEmbedResult = await handler(this.deps,
         {
-            embed: getBaseRes.value, 
+            embed: getBaseResult.value, 
             interaction: interaction
         })
 
-        if (buildedEmbedRes.type === 'err') {
+        if (buildedEmbedResult.type === 'err') {
             this.errorManager.manage(new GenericCmdErr(
                 {
-                    msg: buildedEmbedRes.error.message,
-                    commandName: GetInfo.name,
-                    subCommandName: sub,
-                    userId: interaction.user.id,
+                    msg: buildedEmbedResult.error.message,
                     interaction: interaction,
-                    result: buildedEmbedRes
+                    result: buildedEmbedResult
                 }
             ))
             return
@@ -85,7 +82,7 @@ export default class GetInfo extends Command {
 
         const flags = ephemeral ? MessageFlags.Ephemeral : undefined
         interaction.reply({
-            embeds:[buildedEmbedRes.value],
+            embeds:[buildedEmbedResult.value],
             flags: flags
         })
     }

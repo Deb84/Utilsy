@@ -1,4 +1,4 @@
-import { Interaction } from "discord.js"
+import { ChatInputCommandInteraction, Interaction } from "discord.js"
 
 export type ShowableErrorOptions = {
     result?: Result
