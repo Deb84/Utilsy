@@ -43,13 +43,12 @@ export class CommandHandler implements ICommandHandler {
 
             const cls = new command.default(...deps)
 
-            
-            if (await this.accessHandler.hasCommandAccess(commandInteraction, command.default.accessLevel)) {
+            const hasCommandAccessResult = await this.accessHandler.hasCommandAccess(commandInteraction, command.default)
+            if (hasCommandAccessResult.type === 'ok' && hasCommandAccessResult.value) {
                 cls.execute(commandInteraction)
+                
             } else { // No access
                 const err = new NoPermissionCmd({
-                    commandName: command.default.name,
-                    userId: commandInteraction.user.id,
                     interaction: commandInteraction
                 })
                 this.errorManager.manage(err) 

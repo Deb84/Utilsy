@@ -8,7 +8,7 @@ type CommandErrOpt = ShowableErrorOptions & {
     result?: Result
 }
 
-type SubCommandName = string | undefined
+type SubCommandName = string | null
 type ResultValue = Result | undefined
 
 export class GenericCmdErr extends ShowableCommandErr {
@@ -46,7 +46,7 @@ export class NoPermissionCmd extends ShowableCommandErr {
         this.interaction = options.interaction
         this.defaultMsg= defaultMsg
         this.commandName = this.interaction.commandName
-        this.subCommandName = this.interaction.options.getSubcommand()
+        this.subCommandName = this.interaction.options.getSubcommand(false)
         this.userId = this.interaction.user.id
 
     }

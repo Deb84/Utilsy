@@ -1,3 +1,3 @@
 @echo off
-node src/index.ts
+npx tsx src/index.ts
 pause

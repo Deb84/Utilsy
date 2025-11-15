@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits } from 'discord.js';
+import { GatewayIntentBits } from 'discord.js';
 
 export default [
     GatewayIntentBits.Guilds,

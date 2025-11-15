@@ -1,4 +1,4 @@
-import { discordInfos } from "@/services/discord/discordInfos/discordInfos.ts";
+import { DiscordInfos } from "@/services/discord/discordInfos/discordInfos.ts";
 import { IDiscordInfos } from "@/services/discord/discordInfos/types/IDiscordInfos.ts";
 import { APIEmbedField, channelMention, ChatInputCommandInteraction, EmbedBuilder, GuildMember, Role, User, userMention } from "discord.js";
 import * as R from 'result'

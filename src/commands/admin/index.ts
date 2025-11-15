@@ -2,7 +2,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Command } from "../types/CommandAb.ts";
 import { ICommandsFsUtils, IErrorManager } from "@/handlers/types/ICommandHandler.ts";
 import buildCommand from "./utils/build-command.ts";
-import { ICommandDeclaration } from "@/bootstrap/types/ISlashCmdInit.ts";
+import { ICommandDeclaration } from "@/bootstrap/types/ICommandDeclarationInit.ts";
 import { IEmbedTemplatesBuilder } from "@/utils/discord/embedBuilder/embed-templates-builder.ts";
 import { GenericCmdErr } from "@/errors/showable/command-errors.ts";
 

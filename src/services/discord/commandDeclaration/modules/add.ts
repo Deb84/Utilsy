@@ -17,7 +17,10 @@ export class AddCommand implements IAppCommandAdd {
 
         } else if (command.commandType == 'guild' && command.accessLevel !== 'public') {
             const results: Result[] = []
-            const commandAccess = await this.accessHandler.getCommandAccess(command) as Access
+            const resolveCommandAccessResult = await this.accessHandler.resolveCommandAccess(command)
+            
+            if (resolveCommandAccessResult.type === 'err') return R.err(new Error('err ici')) // to build
+            const commandAccess = resolveCommandAccessResult.value as Access
 
             for (const guildId of commandAccess.guildIDs) {
                 const result = await this.commandRegistar.registerGuild(command.slashCommandBuilder?.toJSON(), guildId)

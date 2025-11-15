@@ -3,6 +3,6 @@ export type {CommandInteraction}
 
 
 export interface IAccessHandler {
-    hasCommandAccess: (interaction: CommandInteraction, accessLevel: AccessLevel) => Promise<Boolean>
-    getCommandAccess: (command: ICommandClass) => Promise<Access | 'public'>
+    hasCommandAccess: (interaction: CommandInteraction, command: ICommandClass) => Promise<Result<Boolean>>
+    resolveCommandAccess: (command: ICommandClass) => Promise<Result<Access | 'public'>>
 }

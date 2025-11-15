@@ -1,8 +1,8 @@
 import { Command } from "@/commands/types/CommandAb.ts"
-import type { ISlashCmdInit, ICommandsFsUtils, ICommandDeclaration } from "./types/ISlashCmdInit.ts"
-export type {ISlashCmdInit}
+import type { ICommandDeclarationInit, ICommandsFsUtils, ICommandDeclaration } from "./types/ICommandDeclarationInit.ts"
+export type {ICommandDeclarationInit}
 
-export class SlashCommandInit implements ISlashCmdInit {
+export class CommandDeclarationInit implements ICommandDeclarationInit {
     private commandFsUtils: ICommandsFsUtils
     private commandDeclaration: ICommandDeclaration
 
@@ -22,6 +22,7 @@ export class SlashCommandInit implements ISlashCmdInit {
             if (existResult.type === 'ok' && existResult.value === false) {
                 this.commandDeclaration.add(commandData)
             }
+            
             if (existResult.type === 'err') {
                 console.error(existResult.error)
             }

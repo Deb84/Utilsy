@@ -8,7 +8,7 @@ import {
 } from "./modules/index.ts";
 
 
-export class discordInfos {
+export class DiscordInfos {
     constructor(private client: Client) {
         this.client = client
     }

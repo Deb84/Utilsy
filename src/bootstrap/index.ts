@@ -13,22 +13,23 @@ import { ErrorManager } from "@/managers/error-manager.ts"
 
 // handlers imports
 import { AccessHandler, type IAccessHandler } from "../handlers/accessHandler.ts"
-import {EventHandler, type IEventHandlers} from "../handlers/eventHandler.ts"
-import {InteractionHandler, type IInteractionHandler} from "../handlers/interactionHandler.ts"
+import { EventHandler, type IEventHandlers } from "../handlers/eventHandler.ts"
+import { InteractionHandler, type IInteractionHandler } from "../handlers/interactionHandler.ts"
 import { CommandHandler, type ICommandHandler } from "../handlers/commandHandler.ts"
 
 // services imports
-import { discordInfos } from "@/services/discord/discordInfos/discordInfos.ts"
+import { AccessResolver, type IAccessResolver } from "@/services/accessResolver/access-resolver.ts"
+import { DiscordInfos } from "@/services/discord/discordInfos/discordInfos.ts"
 import { CommandDeclaration, type ICommandDeclaration } from "../services/discord/commandDeclaration/command-declaration.ts"
 import { CommandRegistar, type ICommandRegistar } from "../services/discord/index.ts"
 import { ErrorReplyer } from "@/services/discord/errorReplyer/error-replyer.ts"
 
 // utils imports
-import {CommandsFsUtils} from '../utils/fsUtils/CommandsFsUtils.ts'
-import { EmbedTemplatesBuilder, IEmbedTemplatesBuilder } from "@/utils/discord/embedBuilder/embed-templates-builder.ts"
+import { CommandsFsUtils } from '../utils/fsUtils/CommandsFsUtils.ts'
+import { EmbedTemplatesBuilder, type IEmbedTemplatesBuilder } from "@/utils/discord/embedBuilder/embed-templates-builder.ts"
 
 // init imports
-import {SlashCommandInit, type ISlashCmdInit} from "./slashCmdInit.ts"
+import { CommandDeclarationInit, type ICommandDeclarationInit } from "./CommandDeclarationInit.ts"
 
 // configs imports
 import { config } from "../config/index.ts"
@@ -55,12 +56,15 @@ export default async () => {
 
     c.bind<IEmbedTemplatesBuilder>('EmbedTemplatesBuilder').toDynamicValue(() => new EmbedTemplatesBuilder(config))
 
+    // services
+    c.bind<IAccessResolver>('AccessResolver').toDynamicValue(() => new AccessResolver(config))
+
     // Errors
     c.bind('ErrorReplyer').toDynamicValue(() => new ErrorReplyer(c.get('EmbedTemplatesBuilder')))
     c.bind('ErrorManager').toDynamicValue(() => new ErrorManager(c.get('ErrorReplyer')))
 
     // Handlers
-    c.bind<IAccessHandler>('AccessHandler').toDynamicValue(() => new AccessHandler(config))
+    c.bind<IAccessHandler>('AccessHandler').toDynamicValue(() => new AccessHandler(c.get('AccessResolver')))
 
     c.bind<ICommandHandler>('CommandHandler').toDynamicValue(() => new CommandHandler(c.get('CommandsFsUtils'), c.get<IAccessHandler>('AccessHandler'), c.get('ErrorManager'), client, container))
 
@@ -71,16 +75,16 @@ export default async () => {
     // services
     c.bind<ICommandRegistar>('CommandRegistar').toDynamicValue(() => new CommandRegistar(c.get<IRestClient>('RestClient'), config.env))
     c.bind<ICommandDeclaration>('CommandDeclaration').toDynamicValue(() => new CommandDeclaration(c.get<ICommandRegistar>('CommandRegistar'), c.get<IAccessHandler>('AccessHandler')))
-    c.bind<ISlashCmdInit>('SlashCommandInit').toDynamicValue(() => new SlashCommandInit(c.get('CommandsFsUtils'), c.get<ICommandDeclaration>('CommandDeclaration')))
+    c.bind<ICommandDeclarationInit>('CommandDeclarationInit').toDynamicValue(() => new CommandDeclarationInit(c.get('CommandsFsUtils'), c.get<ICommandDeclaration>('CommandDeclaration')))
 
-    c.bind('DiscordInfos').toDynamicValue(() => new discordInfos(client))
+    c.bind('DiscordInfos').toDynamicValue(() => new DiscordInfos(client))
 
 
     // exe
 
     c.get<IEventHandlers>('EventHandler').handle()
 
-    c.get<ISlashCmdInit>('SlashCommandInit').declare()
+    c.get<ICommandDeclarationInit>('CommandDeclarationInit').declare()
 
 
 

@@ -2,6 +2,6 @@ import { ICommandDeclaration } from "@/services/discord/commandDeclaration/comma
 import { ICommandsFsUtils } from "../../handlers/types/ICommandHandler.ts";
 export {ICommandDeclaration, ICommandsFsUtils}
 
-export interface ISlashCmdInit {
+export interface ICommandDeclarationInit {
     declare(): Promise<void>
 }

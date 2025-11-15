@@ -18,7 +18,10 @@ export class GetCommand implements IAppCommandGet {
         
         if (command.commandType == 'guild' && command.accessLevel !== 'public') {
             const commandsArray: APIApplicationCommand[] = []
-            const commandAccess = await this.accessHandler.getCommandAccess(command) as Access
+            const resolveCommandAccessResult = await this.accessHandler.resolveCommandAccess(command)
+            if (resolveCommandAccessResult.type === 'err') return R.err(new Error('err'))
+
+            const commandAccess = resolveCommandAccessResult.value as Access
 
             for (const guildId of commandAccess.guildIDs) {
                 const result = await this.commandRegistar.getGuildAll(guildId)

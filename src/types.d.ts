@@ -62,7 +62,7 @@ declare global {
         slashCommandBuild?: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder
     }
 
-    export interface ICommandClass {
+    export interface ICommandClass { // Uninstantiated command class
         new (...args: any[]): Command;
         name: string;
         description: string;
@@ -73,6 +73,7 @@ declare global {
 
 
     export interface CommandModule {
-        default: Command
+        deps: string[]
+        default: ICommandClass
     }
 }
