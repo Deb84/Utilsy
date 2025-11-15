@@ -45,8 +45,6 @@ export default class Admin extends Command {
     private async returnError(msg: string, interaction: ChatInputCommandInteraction) {
         this.errorManager.manage(new GenericCmdErr({
             msg: msg,
-            commandName: Admin.name,
-            userId: interaction.user.id,
             interaction: interaction
         }), {embed: false, defered: true})
     }
