@@ -31,3 +31,6 @@ Orchestrer la création et le comportement d'un emned paginé pour une interface
 5. Envoi de l'embed paginé dans un message Discord.
 6. Après un timeout, suppression des interactions et callback du InteractionHandler.
 
+## Options
+- `authorOnly: boolean` - Si vrai, seules les interactions de l'auteur initial sont acceptées.
+
