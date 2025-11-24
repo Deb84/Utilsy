@@ -34,12 +34,7 @@ export class CommandHandler implements ICommandHandler {
 
         if (command) {
 
-            const deps = []
-                if (command.deps) {
-                    for (const dep of command.deps) {
-                        deps.push(this.container.get(dep))
-                    }
-                }
+            const deps = command.deps.map(dep => this.container.get(dep))
 
             const cls = new command.default(...deps)
 

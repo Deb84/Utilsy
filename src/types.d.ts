@@ -76,4 +76,10 @@ declare global {
         deps: string[]
         default: ICommandClass
     }
+
+
+
+
+    // Others
+    export type Callback<T> = () => T
 }

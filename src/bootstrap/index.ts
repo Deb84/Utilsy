@@ -2,8 +2,11 @@
 import { Container  } from "inversify"
 import { Client, REST } from "discord.js"
 
+// bootsrap types
+import type { ActiveCustomIdRegistry, InteractionCallbackRegistry } from "./types/RegistryTypes.ts"
+
 // error & logging imports
-import { DiscordApiCodeErrResolver } from "../errors/discord/api/discordapi-err-code-resolver.ts"
+import { DiscordApiCodeErrResolver } from "@/errors/discord/api/discordapi-err-code-resolver.ts"
 
 // clients imports
 import { RestClient, type IRestClient } from "../services/discord/api/restClient/rest-client.ts"
@@ -14,7 +17,7 @@ import { ErrorManager } from "@/managers/error-manager.ts"
 // handlers imports
 import { AccessHandler, type IAccessHandler } from "../handlers/accessHandler.ts"
 import { EventHandler, type IEventHandlers } from "../handlers/eventHandler.ts"
-import { InteractionHandler, type IInteractionHandler } from "../handlers/interactionHandler.ts"
+import { InteractionHandler, type IInteractionHandler } from "../handlers/interaction/interactionHandler.ts"
 import { CommandHandler, type ICommandHandler } from "../handlers/commandHandler.ts"
 
 // services imports
@@ -25,14 +28,15 @@ import { CommandRegistar, type ICommandRegistar } from "../services/discord/inde
 import { ErrorReplyer } from "@/services/discord/errorReplyer/error-replyer.ts"
 
 // utils imports
-import { CommandsFsUtils } from '../utils/fsUtils/CommandsFsUtils.ts'
+import { CommandsFsUtils } from '@/utils/fsUtils/CommandsFsUtils.ts'
 import { EmbedTemplatesBuilder, type IEmbedTemplatesBuilder } from "@/utils/discord/embedBuilder/embed-templates-builder.ts"
+import { MapRegistry, SetRegistry } from "@/utils/registry/registry.ts"
 
 // init imports
 import { CommandDeclarationInit, type ICommandDeclarationInit } from "./CommandDeclarationInit.ts"
 
 // configs imports
-import { config } from "../config/index.ts"
+import { config } from "@/config/index.ts"
 
 
 export default async () => {
@@ -42,6 +46,10 @@ export default async () => {
     // create the clients
     const client = new Client({intents: config.intents})
     const rest = new REST({ version: '10'}).setToken(process.env.AUTH!)
+
+    //registry
+    const activeCustomIdRegistry: ActiveCustomIdRegistry = new SetRegistry<string>()
+    const interactionCallbackRegistry: InteractionCallbackRegistry = new MapRegistry<string, Callback<unknown>>()
 
     // Errors & logging
     c.bind('DiscordErrorResolver').toDynamicValue(() => new DiscordApiCodeErrResolver())
@@ -68,7 +76,7 @@ export default async () => {
 
     c.bind<ICommandHandler>('CommandHandler').toDynamicValue(() => new CommandHandler(c.get('CommandsFsUtils'), c.get<IAccessHandler>('AccessHandler'), c.get('ErrorManager'), client, container))
 
-    c.bind<IInteractionHandler>('InteractionHandler').toDynamicValue(() => new InteractionHandler(c.get<ICommandHandler>('CommandHandler')))
+    c.bind<IInteractionHandler>('InteractionHandler').toDynamicValue(() => new InteractionHandler(c.get<ICommandHandler>('CommandHandler'), interactionCallbackRegistry))
 
     c.bind<IEventHandlers>('EventHandler').toDynamicValue(() => new EventHandler(config, client, container))
 
@@ -93,7 +101,7 @@ export default async () => {
     try {
         await client.login(config.env.AUTH)
     } catch {
-        process.exit
+        process.exit()
     }
 
 }

@@ -2,9 +2,9 @@ export type Result<T = unknown, C = unknown, E = Error> =
   | { type: 'ok'; value: T; context?: C}
   | { type: 'err'; error: E; context?: C }
 
-export const ok = <T, C = unknown>(value: T, context?: C): Result<T, C, never> => ({
+export const ok = <T, C = unknown>(value?: T, context?: C): Result<T, C, never> => ({
   type: 'ok',
-  value,
+  value: value as T,
   context,
 })
 
