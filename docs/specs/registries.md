@@ -1,6 +1,20 @@
-# Registries
-Catalogue global des registres du codebase.
+# Class: Registry
 
+## Fields
+**store**: *Map*
+
+## Méthodes
+`register(k, v):` `Result<void>`  
+`unregister(k):` `Result<void>`  
+`get(k):` `Result<value>`  
+`has(k):` `Result<boolean>`
+ 
+<br>
+<br>
+
+# Registries
+
+Catalogue global des registres du codebase.
 
 ## activeCustomIdRegistry
 **Types:** SetRegistry (*string*)  
