@@ -25,6 +25,14 @@ Registre basé sur un *Set* (array)
 `has(v):` `Result<boolean>`
  
 
+<br>
+<br>
+<br>
+
+ # Sujets annexes 
+- [Liste des registres](./RegistriesList.md)
+
+
 
 
 
