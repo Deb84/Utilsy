@@ -14,7 +14,7 @@
 
 # Registries
 
-Catalogue global des registres du codebase.
+Catalogue global des registres de la code codebase.
 
 ## activeCustomIdRegistry
 **Types:** SetRegistry (*string*)  
