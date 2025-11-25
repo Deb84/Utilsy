@@ -3,11 +3,13 @@
 Index global des [registres](./Registries.md) de la code codebase.
 
 ## activeCustomIdRegistry
-**Types:** SetRegistry (*string*)  
+**Entrées**: `name: string`  
+**Types**: *SetRegistry*  
 Store les *customId* actifs. 
 
 ## interactionCallbackRegistry
-**Types:** MapRegistry (*customId*, *Callback*)  
+**Entrées**: `customId: CustomId`, `callback: Callback`  
+**Types**: *MapRegistry*  
 Store des *callbacks* liées à des *customId* prêtes à être utilisées par le *InteractionHandler*
 
 <br>
@@ -15,4 +17,4 @@ Store des *callbacks* liées à des *customId* prêtes à être utilisées par l
 <br>
 
  # Sujets annexes 
-- [Liste des registres](./Registries.md)
+- [Registre](./Registries.md)
