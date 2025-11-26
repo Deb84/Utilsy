@@ -9,7 +9,6 @@ async function reloadConfig() {
 }
 
 
-// TODO : config interface
 export const config: BotConfig = {
     env,
     intents,
