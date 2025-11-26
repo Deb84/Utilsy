@@ -1,11 +1,11 @@
 # Registries
 
-Index global des [registres](./Registries.md) de la code codebase.
+Index global des [Registre](../services/Registries/Registries.md) de la code codebase.
 
 ## activeCustomIdRegistry
 **Entrées**: `name: string`  
 **Types**: *SetRegistry*  
-Store les *[customId](../domain//customId.md)* actifs. 
+Store les *[customId](./ids/customId.md)* actifs. 
 
 ## interactionCallbackRegistry
 **Entrées**: `customId: CustomId`, `callback: Callback`  
@@ -17,4 +17,4 @@ Store des *callbacks* liées à des *customId* prêtes à être utilisées par l
 <br>
 
  # Sujets annexes 
-- [Registre](./Registries.md)
+- [Registre](../services/Registries/Registries.md)

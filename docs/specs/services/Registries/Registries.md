@@ -1,5 +1,5 @@
 # Class: MapRegistry
-Registre basé sur une *Map* (object)
+Registre basé sur une *Map* (*object*)
 
 ## Fields
 **store**: *Map*
@@ -14,7 +14,7 @@ Registre basé sur une *Map* (object)
 
 
 # Class: SetRegistry
-Registre basé sur un *Set* (array)
+Registre basé sur un *Set* (*array*)
 
 ## Fields
 **store**: *Set*
@@ -30,7 +30,7 @@ Registre basé sur un *Set* (array)
 <br>
 
  # Sujets annexes 
-- [Liste des registres](./RegistriesList.md)
+- [Liste des registres](../../domain/RegistriesList.md)
 
 
 
