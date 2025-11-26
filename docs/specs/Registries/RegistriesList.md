@@ -5,7 +5,7 @@ Index global des [registres](./Registries.md) de la code codebase.
 ## activeCustomIdRegistry
 **Entrées**: `name: string`  
 **Types**: *SetRegistry*  
-Store les *customId* actifs. 
+Store les *[customId](../domain//customId.md)* actifs. 
 
 ## interactionCallbackRegistry
 **Entrées**: `customId: CustomId`, `callback: Callback`  
