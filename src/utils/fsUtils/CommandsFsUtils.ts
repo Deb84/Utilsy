@@ -4,7 +4,7 @@ import { pathToFileURL } from 'url';
 import type {ICommandsFsUtils, GetCommandsSettings, CommandEntry, Dirent, ICommand} from './types/ICommandsFsUtils.ts'
 
 
-// CBU (Can Be Upgraded):
+// Can Be Upgraded:
 // too many toLowerCase()
 
 

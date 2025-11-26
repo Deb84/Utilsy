@@ -1,4 +1,5 @@
 There's two kinds of "access" data for the commands:
+
 1. AccessLevel:
 - private: command available only to specific users/guilds defined in the access config
 - test: command available only to specific users/guilds defined in the access config for testing purposes
