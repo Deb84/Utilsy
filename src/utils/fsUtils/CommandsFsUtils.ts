@@ -16,6 +16,7 @@ export class CommandsFsUtils implements ICommandsFsUtils {
         this.config = config
         this.commandsPath = config.paths.commands
         this.entryPoint = 'index'
+        console.log('ici')
     }
 
 

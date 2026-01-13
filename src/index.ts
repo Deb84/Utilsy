@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import { Client } from 'discord.js';
 import dotenv from 'dotenv';
 dotenv.config();

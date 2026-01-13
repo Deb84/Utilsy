@@ -37,7 +37,6 @@ export class EventHandler implements IEventHandlers {
                 if (exclude.includes(fileName) || file.isDirectory()) continue
                 const filePath = path.join(file.parentPath, file.name);
                 const eventMod = await import(pathToFileURL(filePath).href) as IEvent
-                // initialiser les class d'event à la place
 
 
                 const deps = []

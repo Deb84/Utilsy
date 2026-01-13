@@ -4,7 +4,6 @@ import type {
     IAccessHandler, 
     ICommandsFsUtils, 
     IErrorManager,
-    Client, 
     ChatInputCommandInteraction,
     Container
 } from "./types/ICommandHandler.ts";
@@ -19,13 +18,8 @@ export class CommandHandler implements ICommandHandler {
         private commandsFsUtils: ICommandsFsUtils, 
         private accessHandler: IAccessHandler, 
         private errorManager: IErrorManager,
-        private client: Client,
         private container: Container
-    ) {
-        this.commandsFsUtils = commandsFsUtils
-        this.accessHandler = accessHandler
-        this.client = client
-    }
+    ) {}
 
 
     async handle(commandInteraction: ChatInputCommandInteraction) {
@@ -33,9 +27,12 @@ export class CommandHandler implements ICommandHandler {
         const command = await this.commandsFsUtils.importCommand(expectedName, {noCache: true})
 
         if (command) {
-
-            const deps = command.deps.map(dep => this.container.get(dep))
-
+            
+            let deps: any[] = []
+            if (command.deps) {
+                deps = command.deps.map(dep => this.container.get(dep))
+            }
+            
             const cls = new command.default(...deps)
 
             const hasCommandAccessResult = await this.accessHandler.hasCommandAccess(commandInteraction, command.default)

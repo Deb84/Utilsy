@@ -1,5 +1,5 @@
 // extern imports
-import { Container  } from "inversify"
+import { Container, injectable  } from "inversify"
 import { Client, REST } from "discord.js"
 
 // bootsrap types
@@ -60,7 +60,7 @@ export default async () => {
 
 
     // Utils
-    c.bind('CommandsFsUtils').toDynamicValue(() => new CommandsFsUtils(config))
+    c.bind('CommandsFsUtils').toDynamicValue(() => new CommandsFsUtils(config)).inTransientScope()
 
     c.bind<IEmbedTemplatesBuilder>('EmbedTemplatesBuilder').toDynamicValue(() => new EmbedTemplatesBuilder(config))
 
@@ -74,7 +74,7 @@ export default async () => {
     // Handlers
     c.bind<IAccessHandler>('AccessHandler').toDynamicValue(() => new AccessHandler(c.get('AccessResolver')))
 
-    c.bind<ICommandHandler>('CommandHandler').toDynamicValue(() => new CommandHandler(c.get('CommandsFsUtils'), c.get<IAccessHandler>('AccessHandler'), c.get('ErrorManager'), client, container))
+    c.bind<ICommandHandler>('CommandHandler').toDynamicValue(() => new CommandHandler(c.get('CommandsFsUtils'), c.get<IAccessHandler>('AccessHandler'), c.get('ErrorManager'), container))
 
     c.bind<IInteractionHandler>('InteractionHandler').toDynamicValue(() => new InteractionHandler(c.get<ICommandHandler>('CommandHandler'), interactionCallbackRegistry))
 
@@ -83,7 +83,7 @@ export default async () => {
     // services
     c.bind<ICommandRegistar>('CommandRegistar').toDynamicValue(() => new CommandRegistar(c.get<IRestClient>('RestClient'), config.env))
     c.bind<ICommandDeclaration>('CommandDeclaration').toDynamicValue(() => new CommandDeclaration(c.get<ICommandRegistar>('CommandRegistar'), c.get<IAccessHandler>('AccessHandler')))
-    c.bind<ICommandDeclarationInit>('CommandDeclarationInit').toDynamicValue(() => new CommandDeclarationInit(c.get('CommandsFsUtils'), c.get<ICommandDeclaration>('CommandDeclaration')))
+    c.bind<ICommandDeclarationInit>('CommandDeclarationInit').toDynamicValue(() => new CommandDeclarationInit(c.get('CommandsFsUtils'), c.get<ICommandDeclaration>('CommandDeclaration'))).inTransientScope()
 
     c.bind('DiscordInfos').toDynamicValue(() => new DiscordInfos(client))
 
