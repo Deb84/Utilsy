@@ -1,10 +1,11 @@
 import type { InteractionCallbackRegistry } from "@/bootstrap/types/RegistryTypes.ts"
 import type { ICustomIdGenerator } from "@/services/generators/customIdGenerator/types/ICustomIdGenerator.ts"
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction } from "discord.js"
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, EmbedBuilder } from "discord.js"
+import type { IPagedEmbedBuilder } from "./types/IPagedEmbedBuilder.ts"
 
 
 export class PagedEmbedController {
-    private pagedEmbedBuilder:any
+    private pagedEmbedBuilder: IPagedEmbedBuilder | undefined
     private currentPageIndex: number
     private interaction: CommandInteraction | undefined
 
@@ -21,12 +22,12 @@ export class PagedEmbedController {
         this.interaction = interaction
     }
 
-    setPagedEmbedBuilder(pagedEmbedBuilder: any) {
+    setPagedEmbedBuilder(pagedEmbedBuilder: IPagedEmbedBuilder) {
         this.pagedEmbedBuilder = pagedEmbedBuilder
     }
 
-    editMessage() {
-        this.interaction?.editReply({content: 'a'})
+    editMessage(embed: EmbedBuilder) {
+        this.interaction?.editReply({embeds: [embed]})
     }
 
     private createButton(label: string) {
@@ -44,7 +45,17 @@ export class PagedEmbedController {
     }
 
     next() {
-        console.log('a')
+        console.log(this.currentPageIndex)
+        if (!this.pagedEmbedBuilder) return
+
+        const nextIndex = this.currentPageIndex + 1
+        const pagesLenght = this.pagedEmbedBuilder.getPagesLenght()
+        if (pagesLenght && nextIndex >= pagesLenght) null // remove button
+
+        const nextPage = this.pagedEmbedBuilder.getPage(nextIndex)
+        const nextPageEmbed = nextPage.getEmbedBuilder()
+        this.editMessage(nextPageEmbed)
+
     }
 
     previous() {
@@ -59,11 +70,13 @@ export class PagedEmbedController {
         let prevBTN = prev.btn
         let prevCID = prev.id
 
-        this.interactionCallbackRegistry.register(nextCID, this.next)
-        this.interactionCallbackRegistry.register(prevCID, this.previous)
+        this.interactionCallbackRegistry.register(nextCID, this.next.bind(this))
+        this.interactionCallbackRegistry.register(prevCID, this.previous.bind(this))
+
+        if (!this.pagedEmbedBuilder) return
 
         this.interaction?.reply({
-            content: 'test',
+            embeds: [this.pagedEmbedBuilder.getPage(this.currentPageIndex).getEmbedBuilder()],
             components: [nextBTN, prevBTN]
         })
     }

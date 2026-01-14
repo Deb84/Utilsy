@@ -1,7 +1,27 @@
-import { EmbedBuilder } from "@discordjs/builders";
+import type { EmbedBuilder } from "discord.js";
+import type { IPagedEmbedPageBuilder } from "./types/IPagedEmbedPageBuilder.ts";
 
-class PagedEmbedPageBuilder {
+type settings = {
+    index?: number
+}
 
-    constructor(private embedBuilder: EmbedBuilder, private index: number) {
+export class PagedEmbedPageBuilder implements IPagedEmbedPageBuilder {
+    private index: number | undefined
+
+    constructor(private embedBuilder: EmbedBuilder, private settings?: settings) 
+    {
+        this.index
+    }
+
+    setIndex(index: number) {
+        return this.index = index
+    }
+
+    getIndex() {
+        return this.index
+    }
+
+    getEmbedBuilder() {
+        return this.embedBuilder
     }
 }

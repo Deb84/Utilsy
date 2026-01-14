@@ -22,7 +22,7 @@ export class InteractionHandler implements IInteractionHandler {
 
             if (callbackR.type === 'ok') callbackR.value()
             if (callbackR.type === 'err') console.error(callbackR.error)
-
+            interaction.deferUpdate()
 
         }
     }
