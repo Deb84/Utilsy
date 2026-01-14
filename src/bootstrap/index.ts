@@ -26,11 +26,13 @@ import { DiscordInfos } from "@/services/discord/discordInfos/discordInfos.ts"
 import { CommandDeclaration, type ICommandDeclaration } from "../services/discord/commandDeclaration/command-declaration.ts"
 import { CommandRegistar, type ICommandRegistar } from "../services/discord/index.ts"
 import { ErrorReplyer } from "@/services/discord/errorReplyer/error-replyer.ts"
+import { CustomIdGenerator, type ICustomIdGenerator } from "@/services/generators/customIdGenerator/customId-generator.ts"
 
 // utils imports
 import { CommandsFsUtils } from '@/utils/fsUtils/CommandsFsUtils.ts'
 import { EmbedTemplatesBuilder, type IEmbedTemplatesBuilder } from "@/utils/discord/embedBuilder/embed-templates-builder.ts"
 import { MapRegistry, SetRegistry } from "@/utils/registry/registry.ts"
+import { PagedEmbedController } from "@/utils/discord/pagedEmbedController/paged-embed-controller.ts"
 
 // init imports
 import { CommandDeclarationInit, type ICommandDeclarationInit } from "./CommandDeclarationInit.ts"
@@ -56,13 +58,13 @@ export default async () => {
 
     //Clients
     c.bind<Client>('Client').toConstantValue(client)
-    c.bind<IRestClient>('RestClient').toDynamicValue(() => new RestClient(rest, c.get('DiscordErrorResolver')))
+    c.bind<IRestClient>('RestClient').toDynamicValue(() => new RestClient(rest, c.get('DiscordErrorResolver'))).inTransientScope()
 
 
     // Utils
     c.bind('CommandsFsUtils').toDynamicValue(() => new CommandsFsUtils(config)).inTransientScope()
 
-    c.bind<IEmbedTemplatesBuilder>('EmbedTemplatesBuilder').toDynamicValue(() => new EmbedTemplatesBuilder(config))
+    c.bind<IEmbedTemplatesBuilder>('EmbedTemplatesBuilder').toDynamicValue(() => new EmbedTemplatesBuilder(config)).inTransientScope()
 
     // services
     c.bind<IAccessResolver>('AccessResolver').toDynamicValue(() => new AccessResolver(config))
@@ -81,11 +83,16 @@ export default async () => {
     c.bind<IEventHandlers>('EventHandler').toDynamicValue(() => new EventHandler(config, client, container))
 
     // services
-    c.bind<ICommandRegistar>('CommandRegistar').toDynamicValue(() => new CommandRegistar(c.get<IRestClient>('RestClient'), config.env))
-    c.bind<ICommandDeclaration>('CommandDeclaration').toDynamicValue(() => new CommandDeclaration(c.get<ICommandRegistar>('CommandRegistar'), c.get<IAccessHandler>('AccessHandler')))
+    c.bind<ICommandRegistar>('CommandRegistar').toDynamicValue(() => new CommandRegistar(c.get<IRestClient>('RestClient'), config.env)).inTransientScope()
+    c.bind<ICommandDeclaration>('CommandDeclaration').toDynamicValue(() => new CommandDeclaration(c.get<ICommandRegistar>('CommandRegistar'), c.get<IAccessHandler>('AccessHandler'))).inTransientScope()
     c.bind<ICommandDeclarationInit>('CommandDeclarationInit').toDynamicValue(() => new CommandDeclarationInit(c.get('CommandsFsUtils'), c.get<ICommandDeclaration>('CommandDeclaration'))).inTransientScope()
 
     c.bind('DiscordInfos').toDynamicValue(() => new DiscordInfos(client))
+
+
+    c.bind('CustomIdGenerator').toDynamicValue(() => new CustomIdGenerator(activeCustomIdRegistry)).inTransientScope()
+
+    c.bind('PagedEmbedController').toDynamicValue(() => new PagedEmbedController(interactionCallbackRegistry, c.get('CustomIdGenerator')))
 
 
     // exe

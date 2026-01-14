@@ -6,6 +6,7 @@ export class MapRegistry<K, V> implements IMapRegistry<K, V> {
     private store = new Map<K, V>()
 
     register(k: K, v: V): Result<void> {
+        console.log(`${k} set to ${v}`)
         this.store.set(k, v)
         return R.ok()
     }

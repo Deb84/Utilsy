@@ -13,10 +13,8 @@ export class CommandsFsUtils implements ICommandsFsUtils {
     private entryPoint: string
 
     constructor(private config: BotConfig) {
-        this.config = config
         this.commandsPath = config.paths.commands
         this.entryPoint = 'index'
-        console.log('ici')
     }
 
 

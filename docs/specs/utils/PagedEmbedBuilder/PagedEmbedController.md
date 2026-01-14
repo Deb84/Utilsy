@@ -1,4 +1,4 @@
-# Class: PagedEmbedBuilder
+# Class: PagedEmbedController
 
 Orchestrer la création et le comportement d'un emned paginé pour une interface utilisateur par message sur discord.
 
