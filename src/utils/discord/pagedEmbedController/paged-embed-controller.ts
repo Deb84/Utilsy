@@ -1,29 +1,19 @@
 import type { InteractionCallbackRegistry } from "@/bootstrap/types/RegistryTypes.ts"
 import type { ICustomIdGenerator } from "@/services/generators/customIdGenerator/types/ICustomIdGenerator.ts"
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, EmbedBuilder } from "discord.js"
-import type { IPagedEmbedBuilder } from "./types/IPagedEmbedBuilder.ts"
+import type { IPagedEmbedController } from "./types/IPagedEmbedController.ts"
+import type { IPagedEmbed } from "./types/IPagedEmbed.ts"
 
 
-export class PagedEmbedController {
-    private pagedEmbedBuilder: IPagedEmbedBuilder | undefined
-    private currentPageIndex: number
-    private interaction: CommandInteraction | undefined
+export class PagedEmbedController implements IPagedEmbedController {
 
     constructor(
         private interactionCallbackRegistry: InteractionCallbackRegistry,
         private customIdGenerator: ICustomIdGenerator,
+        private interaction: CommandInteraction,
+        private pagedEmbed: IPagedEmbed
     ) {
-        this.pagedEmbedBuilder
-        this.currentPageIndex = 0
         this.interaction
-    }
-
-    setInteraction(interaction: CommandInteraction) {
-        this.interaction = interaction
-    }
-
-    setPagedEmbedBuilder(pagedEmbedBuilder: IPagedEmbedBuilder) {
-        this.pagedEmbedBuilder = pagedEmbedBuilder
     }
 
     editMessage(embed: EmbedBuilder) {
@@ -32,7 +22,7 @@ export class PagedEmbedController {
 
     private createButton(label: string) {
         const customId = this.customIdGenerator.generate()
-        console.log(customId)
+
         return {btn: 
             new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
@@ -45,15 +35,19 @@ export class PagedEmbedController {
     }
 
     next() {
-        console.log(this.currentPageIndex)
-        if (!this.pagedEmbedBuilder) return
+        if (!this.pagedEmbed) return
+        
+        const currentPageIndex = this.pagedEmbed.getCurrentPageIndex()
 
-        const nextIndex = this.currentPageIndex + 1
-        const pagesLenght = this.pagedEmbedBuilder.getPagesLenght()
+        const nextIndex = currentPageIndex + 1
+        const pagesLenght = this.pagedEmbed.getPagesLength()
         if (pagesLenght && nextIndex >= pagesLenght) null // remove button
 
-        const nextPage = this.pagedEmbedBuilder.getPage(nextIndex)
+        const nextPage = this.pagedEmbed.getPage(nextIndex)
         const nextPageEmbed = nextPage.getEmbedBuilder()
+
+        this.pagedEmbed.setCurrentPageIndex(nextIndex)
+
         this.editMessage(nextPageEmbed)
 
     }
@@ -73,10 +67,10 @@ export class PagedEmbedController {
         this.interactionCallbackRegistry.register(nextCID, this.next.bind(this))
         this.interactionCallbackRegistry.register(prevCID, this.previous.bind(this))
 
-        if (!this.pagedEmbedBuilder) return
+        if (!this.pagedEmbed) return
 
         this.interaction?.reply({
-            embeds: [this.pagedEmbedBuilder.getPage(this.currentPageIndex).getEmbedBuilder()],
+            embeds: [this.pagedEmbed.getPage(this.pagedEmbed.getCurrentPageIndex()).getEmbedBuilder()],
             components: [nextBTN, prevBTN]
         })
     }

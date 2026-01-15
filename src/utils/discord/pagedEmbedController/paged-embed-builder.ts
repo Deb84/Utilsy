@@ -29,7 +29,7 @@ export class PagedEmbedBuilder implements IPagedEmbedBuilder {
         return this.pages
     }
 
-    getPagesLenght() {
+    getPagesLength() {
         return this.pages.length
     }
 

@@ -39,6 +39,7 @@ import { CommandDeclarationInit, type ICommandDeclarationInit } from "./CommandD
 
 // configs imports
 import { config } from "@/config/index.ts"
+import { PagedEmbedFactory } from "@/utils/discord/pagedEmbedController/paged-embed-factory.ts"
 
 
 export default async () => {
@@ -92,7 +93,7 @@ export default async () => {
 
     c.bind('CustomIdGenerator').toDynamicValue(() => new CustomIdGenerator(activeCustomIdRegistry)).inTransientScope()
 
-    c.bind('PagedEmbedController').toDynamicValue(() => new PagedEmbedController(interactionCallbackRegistry, c.get('CustomIdGenerator')))
+    c.bind('PagedEmbedFactory').toDynamicValue(() => new PagedEmbedFactory(interactionCallbackRegistry, c.get('CustomIdGenerator')))
 
 
     // exe

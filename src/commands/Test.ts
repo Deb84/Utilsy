@@ -3,8 +3,9 @@ import { Command } from "./types/CommandAb.ts"
 import type { IPagedEmbedController } from "@/utils/discord/pagedEmbedController/types/IPagedEmbedController.ts"
 import { PagedEmbedBuilder } from "@/utils/discord/pagedEmbedController/paged-embed-builder.ts"
 import { PagedEmbedPageBuilder } from "@/utils/discord/pagedEmbedController/paged-embed-page-builder.ts"
+import type { IPagedEmbedFactory } from "@/utils/discord/pagedEmbedController/types/IPagedEmbedFactory.ts"
 
-export const deps = ['PagedEmbedController']
+export const deps = ['PagedEmbedFactory']
 
 class Test extends Command {
     static name = 'test'
@@ -17,7 +18,7 @@ class Test extends Command {
 
 
     constructor(
-        private pagedEmbedController: IPagedEmbedController
+        private pagedEmbedFactory: IPagedEmbedFactory
     ) {
         super()
     }
@@ -26,16 +27,17 @@ class Test extends Command {
     async execute(interaction: CommandInteraction) {
         const embed1 = new EmbedBuilder().setTitle('1')
         const embed2 = new EmbedBuilder().setTitle('2')
+        const embed3 = new EmbedBuilder().setTitle('3')
 
         const pagedEmbedBuild = new PagedEmbedBuilder()
-        console.log(pagedEmbedBuild)
         pagedEmbedBuild
             .addPage(new PagedEmbedPageBuilder(embed1))
             .addPage(new PagedEmbedPageBuilder(embed2))
+            .addPage(new PagedEmbedPageBuilder(embed3))
+       
+        const pagedEmbedController = this.pagedEmbedFactory.create(interaction, pagedEmbedBuild)
 
-        this.pagedEmbedController.setInteraction(interaction)
-        this.pagedEmbedController.setPagedEmbedBuilder(pagedEmbedBuild)
-        this.pagedEmbedController.send()
+        pagedEmbedController.send()
     }
 }
 

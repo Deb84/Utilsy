@@ -10,7 +10,7 @@ export class PagedEmbedPageBuilder implements IPagedEmbedPageBuilder {
 
     constructor(private embedBuilder: EmbedBuilder, private settings?: settings) 
     {
-        this.index
+        this.index = settings?.index
     }
 
     setIndex(index: number) {

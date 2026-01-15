@@ -5,5 +5,5 @@ export interface IPagedEmbedBuilder {
     setPages: (pages: IPagedEmbedPageBuilder[]) => IPagedEmbedBuilder
     getPage: (index: number) => IPagedEmbedPageBuilder
     getPages: () => IPagedEmbedPageBuilder[]
-    getPagesLenght: () => number
+    getPagesLength: () => number
 }
