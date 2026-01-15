@@ -32,14 +32,14 @@ import { CustomIdGenerator, type ICustomIdGenerator } from "@/services/generator
 import { CommandsFsUtils } from '@/utils/fsUtils/CommandsFsUtils.ts'
 import { EmbedTemplatesBuilder, type IEmbedTemplatesBuilder } from "@/utils/discord/embedBuilder/embed-templates-builder.ts"
 import { MapRegistry, SetRegistry } from "@/utils/registry/registry.ts"
-import { PagedEmbedController } from "@/utils/discord/pagedEmbedController/paged-embed-controller.ts"
+import { PagedEmbedController } from "@/services/discord/pagedEmbedController/paged-embed-controller.ts"
 
 // init imports
 import { CommandDeclarationInit, type ICommandDeclarationInit } from "./CommandDeclarationInit.ts"
 
 // configs imports
 import { config } from "@/config/index.ts"
-import { PagedEmbedFactory } from "@/utils/discord/pagedEmbedController/paged-embed-factory.ts"
+import { PagedEmbedFactory } from "@/services/discord/pagedEmbedController/paged-embed-factory.ts"
 
 
 export default async () => {

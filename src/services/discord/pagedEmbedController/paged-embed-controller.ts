@@ -3,6 +3,7 @@ import type { ICustomIdGenerator } from "@/services/generators/customIdGenerator
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, EmbedBuilder } from "discord.js"
 import type { IPagedEmbedController } from "./types/IPagedEmbedController.ts"
 import type { IPagedEmbed } from "./types/IPagedEmbed.ts"
+import { createButton } from "./utils/create-button.ts"
 
 
 export class PagedEmbedController implements IPagedEmbedController {
@@ -20,23 +21,7 @@ export class PagedEmbedController implements IPagedEmbedController {
         this.interaction?.editReply({embeds: [embed]})
     }
 
-    private createButton(label: string) {
-        const customId = this.customIdGenerator.generate()
-
-        return {btn: 
-            new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder()
-                .setCustomId(customId)
-                .setLabel(label)
-                .setStyle(ButtonStyle.Primary)
-        ),
-        id: customId
-        }
-    }
-
     next() {
-        if (!this.pagedEmbed) return
-        
         const currentPageIndex = this.pagedEmbed.getCurrentPageIndex()
 
         const nextIndex = currentPageIndex + 1
@@ -57,21 +42,15 @@ export class PagedEmbedController implements IPagedEmbedController {
     }
 
     send() {
-        let next = this.createButton('next')
-        let prev = this.createButton('previous')
-        let nextBTN = next.btn
-        let nextCID = next.id
-        let prevBTN = prev.btn
-        let prevCID = prev.id
+        let next = createButton(this.customIdGenerator, 'next')
+        let prev = createButton(this.customIdGenerator, 'previous')
 
-        this.interactionCallbackRegistry.register(nextCID, this.next.bind(this))
-        this.interactionCallbackRegistry.register(prevCID, this.previous.bind(this))
-
-        if (!this.pagedEmbed) return
+        this.interactionCallbackRegistry.register(next.id, this.next.bind(this))
+        this.interactionCallbackRegistry.register(prev.id, this.previous.bind(this))
 
         this.interaction?.reply({
             embeds: [this.pagedEmbed.getPage(this.pagedEmbed.getCurrentPageIndex()).getEmbedBuilder()],
-            components: [nextBTN, prevBTN]
+            components: [next.btn, prev.btn]
         })
     }
 

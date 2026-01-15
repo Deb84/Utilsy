@@ -1,9 +1,9 @@
 import { type CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js"
 import { Command } from "./types/CommandAb.ts"
-import type { IPagedEmbedController } from "@/utils/discord/pagedEmbedController/types/IPagedEmbedController.ts"
-import { PagedEmbedBuilder } from "@/utils/discord/pagedEmbedController/paged-embed-builder.ts"
-import { PagedEmbedPageBuilder } from "@/utils/discord/pagedEmbedController/paged-embed-page-builder.ts"
-import type { IPagedEmbedFactory } from "@/utils/discord/pagedEmbedController/types/IPagedEmbedFactory.ts"
+import type { IPagedEmbedController } from "@/services/discord/pagedEmbedController/types/IPagedEmbedController.ts"
+import { PagedEmbedBuilder } from "@/services/discord/pagedEmbedController/paged-embed-builder.ts"
+import { PagedEmbedPageBuilder } from "@/services/discord/pagedEmbedController/paged-embed-page-builder.ts"
+import type { IPagedEmbedFactory } from "@/services/discord/pagedEmbedController/types/IPagedEmbedFactory.ts"
 
 export const deps = ['PagedEmbedFactory']
 
