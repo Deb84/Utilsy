@@ -37,7 +37,7 @@ class Test extends Command {
        
         const pagedEmbedController = this.pagedEmbedFactory.create(interaction, pagedEmbedBuild)
 
-        pagedEmbedController.send()
+        pagedEmbedController.init()
     }
 }
 

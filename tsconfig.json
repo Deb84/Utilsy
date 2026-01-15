@@ -16,6 +16,6 @@
   "include": [
     "src",
     "types.d.ts"
-, "trash/messageHandler.ts"  ],
+   ],
   "exclude": ["trash"]
 }
