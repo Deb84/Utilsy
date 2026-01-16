@@ -54,38 +54,34 @@ export class PagedEmbedController implements IPagedEmbedController {
             // next
             console.log(`blocage de next, currentPageIndex:${currentPageIndex}, pagesLength:${pagesLength}`)
             this.changeDisableState('next', true)
-        } else if (currentPageIndex <= 0) {
+        } else {
+            if (this.isDisabled('next')) this.changeDisableState('next', false)
+        }
+        
+        if (currentPageIndex <= 0) {
             // previous
             console.log(`blocage de prev, currentPageIndex:${currentPageIndex}, pagesLength:${pagesLength}`)
             this.changeDisableState('prev', true)
         } else {
-            if (this.isDisabled('next')) this.changeDisableState('next', false)
             if (this.isDisabled('prev')) this.changeDisableState('prev', false)
         }
     }
 
     next() {
         const currentPageIndex = this.pagedEmbed.getCurrentPageIndex()
-
         const nextIndex = currentPageIndex + 1
 
-
         this.pagedEmbed.setCurrentPageIndex(nextIndex)
-
         this.updateDisableState()
-
         this.displayMessage()
     }
 
     previous() {
         const currentPageIndex = this.pagedEmbed.getCurrentPageIndex()
-
         const previousIndex = currentPageIndex - 1
 
         this.pagedEmbed.setCurrentPageIndex(previousIndex)
-
         this.updateDisableState()
-
         this.displayMessage()
     }
 
@@ -94,7 +90,7 @@ export class PagedEmbedController implements IPagedEmbedController {
         let prev = createButton(this.customIdGenerator, 'previous', 'prev')
         let navigation = createActionRow('navigation')
 
-        navigation.actionRow.addComponents([next.component, prev.component])
+        navigation.actionRow.addComponents(prev.component, next.component)
 
         this.pagedEmbed
             .addComponent(next.ref, next)
@@ -106,6 +102,8 @@ export class PagedEmbedController implements IPagedEmbedController {
         this.interactionCallbackRegistry.register(prev.id, this.previous.bind(this))
 
         this.updateDisableState()
+
+        console.log(this.pagedEmbed.getCurrentPageIndex())
 
         this.interaction?.reply({
             embeds: [this.pagedEmbed.getPage(this.pagedEmbed.getCurrentPageIndex()).getEmbedBuilder()],

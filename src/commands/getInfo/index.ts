@@ -6,6 +6,8 @@ import * as modules from './modules/index.ts'
 import { IDiscordInfos } from "@/services/discord/discordInfos/types/IDiscordInfos.ts"
 import { IErrorManager } from "@/managers/types/IErrorManager.ts"
 import { GenericCmdErr } from "@/errors/showable/command-errors.ts"
+import { IPagedEmbedFactory } from "@/services/discord/pagedEmbedController/types/IPagedEmbedFactory.ts"
+import { PagedEmbedFactory } from "@/services/discord/pagedEmbedController/paged-embed-factory.ts"
 
 type SubCommand = 'user' | 'guild' | 'channel' | 'role' | 'emoji' | 'message'
 
@@ -13,6 +15,7 @@ type Dependencies = {
   errorManager: IErrorManager
   EmbedTemplateBuilder: IEmbedTemplatesBuilder
   discordInfos: IDiscordInfos
+  pagedEmbedFactory: IPagedEmbedFactory
 }
 
 type Handler = (
@@ -22,13 +25,13 @@ type Handler = (
 
 // convert mention to id
 // module return the finalised embed et execute reply
-export const deps = ['ErrorManager', 'EmbedTemplatesBuilder', 'DiscordInfos']
+export const deps = ['ErrorManager', 'EmbedTemplatesBuilder', 'DiscordInfos', 'PagedEmbedFactory']
 
 export default class GetInfo extends Command {
     static name = 'getinfo'
     static description = 'Return an embed of selected informations'
-    static accessLevel: AccessLevel = 'test'
-    static commandType: CommandType = 'guild'
+    static accessLevel: AccessLevel = 'public'
+    static commandType: CommandType = 'global'
     static slashCommandBuilder = buildCommand(new SlashCommandBuilder().setName(GetInfo.name).setDescription(GetInfo.description))
     private deps: Dependencies
 
@@ -36,12 +39,14 @@ export default class GetInfo extends Command {
         private errorManager: IErrorManager,
         private EmbedTemplateBuilder: IEmbedTemplatesBuilder,
         private discordInfos: IDiscordInfos,
+        private pagedEmbedFactory: PagedEmbedFactory
     ) {
         super()
         this.deps = {
             errorManager: this.errorManager,
             EmbedTemplateBuilder: this.EmbedTemplateBuilder,
-            discordInfos: this.discordInfos
+            discordInfos: this.discordInfos,
+            pagedEmbedFactory: this.pagedEmbedFactory
         }
     }
 
@@ -81,9 +86,9 @@ export default class GetInfo extends Command {
         }
 
         const flags = ephemeral ? MessageFlags.Ephemeral : undefined
-        interaction.reply({
+        /* interaction.reply({
             embeds:[buildedEmbedResult.value],
             flags: flags
-        })
+        }) */
     }
 }

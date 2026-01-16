@@ -1,11 +1,17 @@
 import { DiscordInfos } from "@/services/discord/discordInfos/discordInfos.ts";
 import { IDiscordInfos } from "@/services/discord/discordInfos/types/IDiscordInfos.ts";
+import { PagedEmbedBuilder } from "@/services/discord/pagedEmbedController/paged-embed-builder.ts";
+import { PagedEmbedFactory } from "@/services/discord/pagedEmbedController/paged-embed-factory.ts";
+import { PagedEmbedPageBuilder } from "@/services/discord/pagedEmbedController/paged-embed-page-builder.ts";
+import { PagedEmbed } from "@/services/discord/pagedEmbedController/paged-embed.ts";
+import { IPagedEmbedFactory } from "@/services/discord/pagedEmbedController/types/IPagedEmbedFactory.ts";
 import { APIEmbedField, channelMention, ChatInputCommandInteraction, EmbedBuilder, GuildMember, Role, User, userMention } from "discord.js";
 import * as R from 'result'
 
 
 export default async (deps: {
-    discordInfos: IDiscordInfos
+    discordInfos: IDiscordInfos,
+    pagedEmbedFactory: IPagedEmbedFactory
 }, args: {
     embed: EmbedBuilder, 
     interaction: ChatInputCommandInteraction
@@ -87,6 +93,33 @@ export default async (deps: {
         guild.safetyAlertsChannelId ? {name: 'Safety Alerts Channel ID', value: String(channelMention(guild.safetyAlertsChannelId)), inline: true} : undefined,
         {name: 'Owner Id', value: String(guild.ownerId), inline: true},
     ].filter(Boolean) as APIEmbedField[]
+
+
+    let counter: number
+    let pagedEmbedPageBuilderArray: PagedEmbedPageBuilder[] = []
+    let pageFields: APIEmbedField[] = []
+    counter = 0
+    for (const [i, field] of fullFields.entries()) {
+        counter++
+
+        pageFields.push(field)
+        if (counter === 24 || i === fullFields.length -1) {
+            const embed = new EmbedBuilder().addFields(pageFields)
+            const pagedEmbedPageBuilder = new PagedEmbedPageBuilder(embed)
+            pagedEmbedPageBuilderArray.push(pagedEmbedPageBuilder)
+            counter = 0
+            pageFields = []
+        }
+    }
+
+
+    const pagedEmbedBuilder = new PagedEmbedBuilder()
+    for (let page of pagedEmbedPageBuilderArray) {
+        pagedEmbedBuilder.addPage(page)
+    }
+    console.log(pagedEmbedBuilder)
+    const controller = deps.pagedEmbedFactory.create(interaction, pagedEmbedBuilder)
+    controller.init()
 
     //build
     args.embed
