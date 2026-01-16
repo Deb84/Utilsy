@@ -11,4 +11,5 @@ export interface IPagedEmbed {
     getComponent<T extends ComponentBuilderObj>(name: string): T
     addActionRow: (name: string, actionRow: ActionRowObj) => IPagedEmbed
     getActionRow: (name: string) => ActionRowObj
+    getActionsRows: () => Set<ActionRowObj>
 }

@@ -16,3 +16,5 @@ export interface ActionRowObj {
     actionRow: ActionRowBuilder,
     ref: string
 }
+
+export type ButtonDataWithDisabled = { disabled?: boolean }

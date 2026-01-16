@@ -55,7 +55,11 @@ export class PagedEmbed implements IPagedEmbed {
     getActionRow(name: string) {
         const actionRow = this.actionRows.get(name)
         if (actionRow) return actionRow 
-        throw new Error('component dont exist')
+        throw new Error('actionRow dont exist')
+    }
+
+    getActionsRows() {
+        return new Set(this.actionRows.values())
     }
 
 }
